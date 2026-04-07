@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include "GLFW/glfw3.h"
+#include <stb/stb_image.h>
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -25,7 +26,7 @@ int main(){
     CppGame::init();
     Window window = Window(WIDTH, HEIGHT, "title");
     
-    CppGame::Draw::init(window);
+    CppGame::Draw2D::init(window);
 
     Mode::setOrigin(Mode::ORIGIN_CENTER);
     Mode::setDirection(Mode::DIRECTION_DOWN_RIGHT);
@@ -34,6 +35,9 @@ int main(){
     std::cout << __FILE__ << ":" << __LINE__ << " " << __FUNCTION__ << "\n";
     
     CppGame::Mouse::setPosition(0, 0);
+
+    Texture texture("deleteme/image.png");
+    std::cout << texture.width << " " << texture.height << "\n";
     while (!window.exitPressed()){
         // clear all events 
         glfwPollEvents();
@@ -42,13 +46,13 @@ int main(){
         window.fill(64, 0, 64, 255);
         
         CppGame::Mouse::getPosition(&x, &y);
-        std::cout << "Mouse position: " << x << " " << y << "\n";
         offset[0] += x;
         offset[1] += y;
 
-        CppGame::Draw::rect(offset[0], offset[1], 100, 100, 255, 0, 0, 10);
-        CppGame::Draw::line(offset[0] + 50, offset[1] + 50, offset[0] - 50, offset[1] - 50, 0, 0, 0, 10);
-        CppGame::Draw::line(offset[0] + 50, offset[1] - 50, offset[0] - 50, offset[1] + 50, 200, 200, 200, 10);
+        CppGame::Draw2D::rect(offset[0], offset[1], 100, 100, 255, 0, 0, 10);
+        CppGame::Draw2D::line(offset[0] + 50, offset[1] + 50, offset[0] - 50, offset[1] - 50, 0, 0, 0, 10);
+        CppGame::Draw2D::line(offset[0] + 50, offset[1] - 50, offset[0] - 50, offset[1] + 50, 200, 200, 200, 10);
+        CppGame::Draw2D::texture(0, 0, texture, offset[0] % 256, offset[1] % 256, 128);
 
         CppGame::Mouse::setPosition(0, 0);
         // swaps two image buffers.

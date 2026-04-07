@@ -6,7 +6,8 @@ in vec2 relpos;
 uniform float border_width;
 uniform float width;
 uniform float height;
-uniform int shape_type; // 0 for rect, 1 for line
+uniform int shape_type; // 0 for rect, 1 for line, 2 for texture
+uniform sampler2D texture1;
 
 out vec4 FragColor;
 
@@ -14,6 +15,10 @@ void main()
 {
    if (shape_type == 1){
       FragColor = vec4(out_color.r, out_color.g, out_color.b, 1.0);
+      return;
+   }
+   if (shape_type == 2){
+      FragColor = texture(texture1, relpos / vec2(width, height) + vec2(0.5, 0.5)) * vec4(out_color.r, out_color.g, out_color.b, 1.0);
       return;
    }
    if (border_width < 0.0f){

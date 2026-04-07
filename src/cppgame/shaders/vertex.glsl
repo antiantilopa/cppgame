@@ -11,13 +11,13 @@ uniform float height;
 uniform vec3 color;
 uniform float window_width;
 uniform float window_height;
-uniform int shape_type; // 0 for rect, 1 for line
+uniform int shape_type; // 0 for rect, 1 for line // 2 for texture
 
 out vec3 out_color;
 out vec2 relpos;
 
 void main(){
-   if (shape_type == 0){
+   if (shape_type == 0 || shape_type == 2){
       vec4 outputpos = vec4((aPos.x * width + x * 2) / window_width, (aPos.y * height + y * 2) / window_height, 0.0, 1.0);
       gl_Position = outputpos;
       out_color = color;
