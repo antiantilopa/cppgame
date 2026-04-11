@@ -48,5 +48,5 @@ void Window::flip(){
 
 void Window::fill(unsigned int r, unsigned int g, unsigned int b, unsigned int a){
     glClearColor((float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, (float) a / 255.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
