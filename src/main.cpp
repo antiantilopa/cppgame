@@ -40,8 +40,8 @@ int main(){
     CppGame::init();
     Window window = Window(WIDTH, HEIGHT, "title");
     
-    CppGame::Draw2D::init(window);
     CppGame::Draw3D::init(window);
+    CppGame::Draw2D::init(window);
 
     Mode::setOrigin(Mode::ORIGIN_CENTER);
     Mode::setDirection(Mode::DIRECTION_DOWN_RIGHT);
@@ -56,38 +56,38 @@ int main(){
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view = glm::mat4(1.0f);
     glm::mat4 proj = glm::mat4(1.0f);
-    model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, 0.0f));
-    proj = glm::perspective(glm::radians(45.0f), (float) WIDTH / HEIGHT, 0.1f, 100.0f);
-    glUniformMatrix4fv(glGetAttribLocation(CppGame::shader2_ptr->ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
-    glUniformMatrix4fv(glGetAttribLocation(CppGame::shader2_ptr->ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
-    glUniformMatrix4fv(glGetAttribLocation(CppGame::shader2_ptr->ID, "proj"), 1, GL_FALSE, glm::value_ptr(proj));
 
-    std::printf(glm::to_string(proj * view * model * glm::vec4(-1, -1, -1, 1)).c_str());
-    std::cout << "\n";
-    std::printf(glm::to_string(proj * view * model * glm::vec4(-1, -1, 1, 1)).c_str());
-    std::cout << "\n";
-    std::printf(glm::to_string(proj * view * model * glm::vec4(-1, 1, -1, 1)).c_str());
-    std::cout << "\n";
-
+    // Assigns different transformations to each matrix
+    view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
+    proj = glm::perspective(glm::radians(45.0f), (float)WIDTH / HEIGHT, 0.1f, 100.0f);
     while (!window.exitPressed()){
+        model = glm::rotate(model, glm::radians(0.001f), glm::vec3(0.0f, 1.0f, 0.0f));
+        
+        int modelLoc = glGetUniformLocation(CppGame::shader2_ptr->ID, "model");
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        int viewLoc = glGetUniformLocation(CppGame::shader2_ptr->ID, "view");
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        int projLoc = glGetUniformLocation(CppGame::shader2_ptr->ID, "proj");
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+		// Outputs the matrices into the Vertex Shader
+
         if (glfwGetKey(CppGame::window_ptr->window, GLFW_KEY_W)){
-            view = glm::translate(view, glm::vec3(0.0f, 0.0f, -0.1f));
+            view = glm::translate(view, glm::vec3(0.0f, 0.0f, +0.001f));
         }
         if (glfwGetKey(CppGame::window_ptr->window, GLFW_KEY_S)){
-            view = glm::translate(view, glm::vec3(0.0f, 0.0f, 0.1f));
+            view = glm::translate(view, glm::vec3(0.0f, 0.0f, -0.001f));
         }
         if (glfwGetKey(CppGame::window_ptr->window, GLFW_KEY_A)){
-            view = glm::translate(view, glm::vec3(-0.1f, 0.0f, 0.0f));
+            view = glm::translate(view, glm::vec3(+0.001f, 0.0f, 0.0f));
         }
         if (glfwGetKey(CppGame::window_ptr->window, GLFW_KEY_D)){
-            view = glm::translate(view, glm::vec3(0.1f, 0.0f, 0.1f));
+            view = glm::translate(view, glm::vec3(-0.001f, 0.0f, 0.0f));
         }
         if (glfwGetKey(CppGame::window_ptr->window, GLFW_KEY_SPACE)){
-            view = glm::translate(view, glm::vec3(0.0f, 0.1f, 0.0f));
+            view = glm::translate(view, glm::vec3(0.0f, -0.001f, 0.0f));
         }
         if (glfwGetKey(CppGame::window_ptr->window, GLFW_KEY_LEFT_SHIFT)){
-            view = glm::translate(view, glm::vec3(0.0f, -0.1f, 0.0f));
+            view = glm::translate(view, glm::vec3(0.0f, +0.001f, 0.0f));
         }
         // std::printf(glm::to_string(view * glm::vec4(0, 0, 0, 1)).c_str());
         // std::cout << "\n";
@@ -95,16 +95,16 @@ int main(){
         glfwPollEvents();
         
         // sets background color for clear or swap
-        // window.fill(64, 0, 64, 255);
+        window.fill(64, 0, 64, 255);
         
         CppGame::Mouse::getPosition(&x, &y);
         offset[0] = x;
         offset[1] = y;
 
-        // CppGame::Draw2D::rect(offset[0], offset[1], 100, 100, 255, 0, 0, 10);
-        // CppGame::Draw2D::line(offset[0] + 50, offset[1] + 50, offset[0] - 50, offset[1] - 50, 0, 0, 0, 10);
-        // CppGame::Draw2D::line(offset[0] + 50, offset[1] - 50, offset[0] - 50, offset[1] + 50, 200, 200, 200, 10);
-        // CppGame::Draw2D::texture(0, 0, texture, abs(offset[0] % 510 - 255), abs(offset[1] % 510 - 255), 128);
+        CppGame::Draw2D::rect(offset[0], offset[1], 100, 100, 255, 0, 0, 10);
+        CppGame::Draw2D::line(offset[0] + 50, offset[1] + 50, offset[0] - 50, offset[1] - 50, 0, 0, 0, 10);
+        CppGame::Draw2D::line(offset[0] + 50, offset[1] - 50, offset[0] - 50, offset[1] + 50, 200, 200, 200, 10);
+        CppGame::Draw2D::texture(0, 0, texture, abs(offset[0] % 510 - 255), abs(offset[1] % 510 - 255), 128);
 
         CppGame::Draw3D::cube(0, 0, 0, 1, 1, 1, 200, 200, 200);
 

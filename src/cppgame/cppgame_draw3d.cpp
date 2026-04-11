@@ -11,6 +11,13 @@ float vertices_cube[] = {
      1.0f,  1.0f, -1.0f,
      1.0f,  1.0f,  1.0f,
 };
+float vertices_piramid[] = {
+    -0.5f, 0.0f,  0.5f, 
+	-0.5f, 0.0f, -0.5f, 
+	 0.5f, 0.0f, -0.5f, 
+	 0.5f, 0.0f,  0.5f, 
+	 0.0f, 0.8f,  0.0f,
+};
 unsigned int indices_cube[] =
 {
     0, 1, 2, 1, 2, 3,
@@ -20,6 +27,15 @@ unsigned int indices_cube[] =
     7, 5, 3, 5, 3, 1,
     7, 6, 3, 6, 3, 2,
 };
+unsigned int indices_piramid[] = {
+	0, 1, 2,
+	0, 2, 3,
+	0, 1, 4,
+	1, 2, 4,
+	2, 3, 4,
+	3, 0, 4
+};
+
 unsigned int indices_line3d[] = {
     0, 7
 };
@@ -59,10 +75,10 @@ void CppGame::Draw3D::init(Window& window){
     vbo3d_ptr = &vbo;
     ebo_cube_ptr = &ebo_cube;
     ebo_line3d_ptr = &ebo_line;
-    // glEnable(GL_DEPTH_TEST);
 }
 
 void CppGame::Draw3D::cube(int x, int y, int z, int width, int height, int depth, char red, char green, char blue, int border_width){
+    glEnable(GL_DEPTH_TEST);
     if (border_width * 2 >= width || border_width * 2 >= height || border_width * 2 >= depth){
         border_width = -1;
     }

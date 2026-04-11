@@ -13,9 +13,6 @@ out vec4 FragColor;
 
 void main()
 {
-    FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-    return;
-
     if (shape_type == 1 || shape_type == 2){
         FragColor = vec4(out_color.r, out_color.g, out_color.b, 1.0);
         return;
@@ -24,8 +21,20 @@ void main()
         FragColor = vec4(out_color.r, out_color.g, out_color.b, 1.0);
         return;
     }
-    if (abs(width - 2 * border_width) > abs(relpos.x * 2) && abs(height - 2 * border_width) > abs(relpos.y * 2) && abs(depth - 2 * border_width) > abs(relpos.z * 2)){
+    int cnt = 0;
+    if (abs(width - 2 * border_width) - abs(relpos.x * 2) > 0){
+        cnt++;
+    }
+    if (abs(height - 2 * border_width) - abs(relpos.y * 2) > 0){
+        cnt++;
+    }
+    if (abs(depth - 2 * border_width) - abs(relpos.z * 2) > 0){
+        cnt++;
+    }
+    if (cnt > 1){
         FragColor = vec4(0.0f, 0.0f, 0.0f, 0.0f);
         return;
     }
+    FragColor = vec4(out_color.r, out_color.g, out_color.b, 1.0);
+    return;
 }

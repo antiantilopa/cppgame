@@ -61,6 +61,7 @@ void CppGame::Draw2D::init(Window& window){
 }
 
 void CppGame::Draw2D::rect(int x, int y, int width, int height, char red, char green, char blue, int border_width){
+    glDisable(GL_DEPTH_TEST);
     if (border_width * 2 >= width || border_width * 2 >= height){
         border_width = -1;
     }
@@ -103,6 +104,7 @@ void CppGame::Draw2D::rect(int rect_value[4], char color[3], int border_width){
 }
 
 void CppGame::Draw2D::line(int x1, int y1, int x2, int y2, char red, char green, char blue, int width){
+    glDisable(GL_DEPTH_TEST);
     float color[3] = {(float)(unsigned char)red / 255.0f, (float)(unsigned char)green / 255.0f, (float)(unsigned char)blue / 255.0f};
     shader1_ptr->activate();
     shader1_ptr->setUniform("x", (float)(x1 + (Mode::ox - 1) * (window_ptr->width) / 2) * Mode::x_sign);
@@ -136,6 +138,7 @@ void CppGame::Draw2D::line(int line_value[4], char color[3], int width){
 }
 
 void CppGame::Draw2D::texture(int x, int y, Texture& texture, char red, char green, char blue){
+    glDisable(GL_DEPTH_TEST);
     float color[3] = {(float)(unsigned char)red / 255.0f, (float)(unsigned char)green / 255.0f, (float)(unsigned char)blue / 255.0f};
     if (texture.channel_num == 4){
         glEnable(GL_BLEND);

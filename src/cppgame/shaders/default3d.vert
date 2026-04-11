@@ -25,7 +25,7 @@ out vec3 relpos;
 
 void main(){
     vec4 outputpos = vec4((aPos.x * width + x * 2), (aPos.y * height + y * 2), (aPos.z * depth + z * 2), 1.0);
-    gl_Position = proj * view * model * vec4(aPos, 1);
+    gl_Position = proj * view * model * outputpos;
     out_color = color;
     relpos = vec3(aPos.x * width / 2, aPos.y * height / 2, aPos.z * depth / 2);
     return;
