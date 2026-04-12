@@ -3,38 +3,15 @@
 in vec3 out_color;
 in vec3 relpos;
 
-uniform float border_width;
-uniform float width;
-uniform float height;
-uniform float depth;
-uniform int shape_type; // 0 for cube, 1 for line, 2 for plane
-
 out vec4 FragColor;
+
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 proj;
 
 void main()
 {
-    if (shape_type == 1 || shape_type == 2){
-        FragColor = vec4(out_color.r, out_color.g, out_color.b, 1.0);
-        return;
-    }
-    if (border_width < 0.0f){
-        FragColor = vec4(out_color.r, out_color.g, out_color.b, 1.0);
-        return;
-    }
-    int cnt = 0;
-    if (abs(width - 2 * border_width) - abs(relpos.x * 2) > 0){
-        cnt++;
-    }
-    if (abs(height - 2 * border_width) - abs(relpos.y * 2) > 0){
-        cnt++;
-    }
-    if (abs(depth - 2 * border_width) - abs(relpos.z * 2) > 0){
-        cnt++;
-    }
-    if (cnt > 1){
-        FragColor = vec4(0.0f, 0.0f, 0.0f, 0.0f);
-        return;
-    }
-    FragColor = vec4(out_color.r, out_color.g, out_color.b, 1.0);
+    vec4 clr = model * view * proj * vec4(relpos, 1.0f);
+    FragColor = vec4(vec3(clr) * out_color, 0.5f);
     return;
 }

@@ -95,8 +95,6 @@ void CppGame::Draw3D::cube(int x, int y, int z, int width, int height, int depth
     shader2_ptr->setUniform("y", (float)y);
     shader2_ptr->setUniform("z", (float)z);
     shader2_ptr->setUniform("color", color, 3);
-    shader2_ptr->setUniform("border_width", (float)border_width);
-    shader2_ptr->setUniform("shape_type", CUBE_TYPE);
 
     vao3d_ptr->bind();
     vbo3d_ptr->bind();
