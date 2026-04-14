@@ -11,7 +11,7 @@ uniform mat4 proj;
 
 void main()
 {
-    vec4 clr = model * view * proj * vec4(relpos, 1.0f);
-    FragColor = vec4(vec3(clr) * out_color, 0.5f);
+    vec4 clr = model * vec4(relpos, 1.0f);
+    FragColor = vec4(vec3(clr) * out_color, 0.8f);
     return;
 }

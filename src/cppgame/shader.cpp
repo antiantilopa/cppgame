@@ -6,6 +6,8 @@
 #include <vector>
 
 #include <glad/glad.h>
+#include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 #include "include/shader.h"
 
@@ -197,3 +199,28 @@ void Shader::setUniform(const char* name, T value){
 template void Shader::setUniform<float>(const char* name, float value);
 template void Shader::setUniform<int>(const char* name, int value);
 template void Shader::setUniform<unsigned int>(const char* name, unsigned int value);
+
+void Shader::setUniformMatrix(const char* name, glm::mat4 value){
+    int location = glGetUniformLocation(ID, name);
+    if (location == -1){
+        std::cout << "(!) WARNING: uniform '" << name << "' not found in shader program" << std::endl;
+        return;
+    }
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
+}
+void Shader::setUniformMatrix(const char* name, glm::mat3 value){
+    int location = glGetUniformLocation(ID, name);
+    if (location == -1){
+        std::cout << "(!) WARNING: uniform '" << name << "' not found in shader program" << std::endl;
+        return;
+    }
+    glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(value));
+}
+void Shader::setUniformMatrix(const char* name, glm::mat2 value){
+    int location = glGetUniformLocation(ID, name);
+    if (location == -1){
+        std::cout << "(!) WARNING: uniform '" << name << "' not found in shader program" << std::endl;
+        return;
+    }
+    glUniformMatrix2fv(location, 1, GL_FALSE, glm::value_ptr(value));
+}

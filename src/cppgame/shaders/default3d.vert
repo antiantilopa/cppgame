@@ -16,16 +16,15 @@ uniform float window_width;
 uniform float window_height;
 uniform int shape_type; // 0 for cube, 1 for line // 2 for plane
 
+uniform mat4 camera;
 uniform mat4 model;
-uniform mat4 view;
-uniform mat4 proj;
 
 out vec3 out_color;
 out vec3 relpos;
 
 void main(){
     vec4 outputpos = vec4((aPos.x * width + x * 2), (aPos.y * height + y * 2), (aPos.z * depth + z * 2), 1.0);
-    gl_Position = proj * view * model * outputpos;
+    gl_Position = camera * model * outputpos;
     out_color = color;
     relpos = vec3(aPos.x * width / 2, aPos.y * height / 2, aPos.z * depth / 2);
     return;

@@ -7,6 +7,7 @@
 class Window{
 public:
     int width, height;
+    float aspect;
     GLFWwindow* window;
 
     Window(int width, int height, const char* title, bool fullscreen = false);

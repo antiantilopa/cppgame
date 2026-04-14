@@ -32,6 +32,7 @@ Window::Window(int width, int height, const char* title, bool fullscreen){
     glViewport(0, 0, width, height);
     this->width = width;
     this->height = height;
+    this->aspect = (float) width / (float) height;
 }
 
 Window::~Window(){

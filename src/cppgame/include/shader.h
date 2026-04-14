@@ -3,6 +3,7 @@
 
 #include <filesystem>
 #include <string>
+#include "glm/glm.hpp"
 
 class Shader{
 public:
@@ -18,6 +19,9 @@ public:
     void setUniform(const char* name, T* value_ptr, int dim = 1);
     template<typename T>
     void setUniform(const char* name, T value);
+    void setUniformMatrix(const char* name, glm::mat4 value);
+    void setUniformMatrix(const char* name, glm::mat3 value);
+    void setUniformMatrix(const char* name, glm::mat2 value);
 };
 
 
