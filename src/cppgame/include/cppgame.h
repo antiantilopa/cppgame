@@ -9,6 +9,8 @@
 #include "mode.h"
 #include "texture.h"
 #include "model.h"
+#include "vertex.h"
+#include "mesh.h"
 
 #include <string>
 #include <filesystem>
@@ -26,6 +28,8 @@ public:
     static EBO* ebo_line2d_ptr;
     static EBO* ebo_cube_ptr;
     static EBO* ebo_line3d_ptr;
+    static Mesh* cube;
+    static Mesh* piramid;
 
     static std::filesystem::path PATH;
     static void init();
@@ -51,6 +55,10 @@ public:
         static void cube(int x, int y, int z, int width, int height, int depth, char color[3], int border_width=-1);
         static void cube(int cube_value[6], char red, char green, char blue, int border_width=-1);
         static void cube(int cube_value[6], char color[3], int border_width=-1);
+        static void piramid(int x, int y, int z, int width, int height, int depth, char red, char green, char blue, int border_width=-1);
+        static void piramid(int x, int y, int z, int width, int height, int depth, char color[3], int border_width=-1);
+        static void piramid(int cube_value[6], char red, char green, char blue, int border_width=-1);
+        static void piramid(int cube_value[6], char color[3], int border_width=-1);
         static void line(int x1, int y1, int z1, int x2, int y2, int z2, char red, char green, char blue, int width=1);
         static void line(int x1, int y1, int z1, int x2, int y2, int z2, char color[3], int width=1);
         static void line(int line_value[6], char red, char green, char blue, int width=1);

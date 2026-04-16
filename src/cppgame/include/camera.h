@@ -13,7 +13,6 @@
 #include <stb/stb_image.h>
 
 #include "shader.h"
-#include "cppgame.h"
 
 // since there is gonna be only one camera, it can store up to megabyte of data, if it makes it time efficient enough
 class Camera{
@@ -48,6 +47,7 @@ public:
     glm::vec3 getUp();
     glm::vec3 getForward();
     glm::vec3 getRight();
+    glm::vec3 getPos();
 };
 
 #endif

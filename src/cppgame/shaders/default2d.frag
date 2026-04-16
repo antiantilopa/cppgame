@@ -1,7 +1,7 @@
 #version 330 core
 
-in vec3 out_color;
-in vec2 relpos;
+in vec4 out_color;
+in vec2 out_tex_coord;
 
 uniform float border_width;
 uniform float width;
@@ -13,19 +13,18 @@ out vec4 FragColor;
 
 void main()
 {
+   FragColor = out_color;
    if (shape_type == 1){
-      FragColor = vec4(out_color.r, out_color.g, out_color.b, 1.0);
       return;
    }
    if (shape_type == 2){
-      FragColor = texture(texture1, relpos / vec2(width, height) + vec2(0.5, 0.5)) * vec4(out_color.r, out_color.g, out_color.b, 1.0);
+      FragColor = texture(texture1, out_tex_coord) * out_color;
       return;
    }
    if (border_width < 0.0f){
-      FragColor = vec4(out_color.r, out_color.g, out_color.b, 1.0);
       return;
    }
-   if (abs(width - 2 * border_width) > abs(relpos.x * 2) && abs(height - 2 * border_width) > abs(relpos.y * 2)){
+   if (width - 2 * border_width > abs(out_tex_coord.x * 2 - 1) * width && height - 2 * border_width > abs(out_tex_coord.y * 2 - 1) * height){
       FragColor = vec4(0.0f, 0.0f, 0.0f, 0.0f);
       return;
    }

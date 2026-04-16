@@ -11,7 +11,7 @@ const unsigned int Texture::NEAREST = GL_NEAREST;
 const unsigned int Texture::REPEAT = GL_REPEAT;
 const unsigned int Texture::CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE;
 
-Texture::Texture(const char* image_path, unsigned int filter, unsigned int wrap){
+Texture::Texture(const char* image_path, unsigned int filter, unsigned int wrap, const char* type){
     stbi_set_flip_vertically_on_load(true);
     unsigned char* data = stbi_load(image_path, &width, &height, &channel_num, 0);
     if(!data){
@@ -19,6 +19,7 @@ Texture::Texture(const char* image_path, unsigned int filter, unsigned int wrap)
         std::cout << stbi_failure_reason() << std::endl;
         throw "Failed to load texture ahh error";
     }
+    this->type = type;
     glGenTextures(1, &ID);
     glBindTexture(GL_TEXTURE_2D, ID);
 
@@ -38,8 +39,8 @@ Texture::Texture(const char* image_path, unsigned int filter, unsigned int wrap)
     stbi_image_free(data);
 }
 
-Texture::Texture(std::filesystem::path& image_path, unsigned int filter, unsigned int wrap): Texture(image_path.string().c_str(), filter, wrap){}
-Texture::Texture(std::string& image_path, unsigned int filter, unsigned int wrap): Texture(image_path.c_str(), filter, wrap){}
+Texture::Texture(std::filesystem::path& image_path, unsigned int filter, unsigned int wrap, const char* type): Texture(image_path.string().c_str(), filter, wrap, type){}
+Texture::Texture(std::string& image_path, unsigned int filter, unsigned int wrap, const char* type): Texture(image_path.c_str(), filter, wrap, type){}
 
 void Texture::bind(){
     glBindTexture(GL_TEXTURE_2D, ID);
@@ -47,4 +48,13 @@ void Texture::bind(){
 
 void Texture::unbind(){
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Texture::texUnit(Shader& shader, const char* uniform, unsigned int unit){
+    // Gets the location of the uniform
+	unsigned int texUni = glGetUniformLocation(shader.ID, uniform);
+	// Shader needs to be activated before changing the value of a uniform
+	shader.activate();
+	// Sets the value of the uniform
+	glUniform1i(texUni, unit);
 }

@@ -1,20 +1,21 @@
 #include "include/cppgame.h"
 #include "GLFW/glfw3.h"
 #include <iostream>
+#include <vector>
 
-float vertices_square[] =
+std::vector<Vertex2d> vertices_square =
 {
-    -1.0f, -1.0f,
-    1.0f, -1.0f,
-    1.0f, 1.0f,
-    -1.0f, 1.0f,
+    Vertex2d{glm::vec2(-1.0f, -1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+    Vertex2d{glm::vec2(1.0f, -1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
+    Vertex2d{glm::vec2(1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
+    Vertex2d{glm::vec2(-1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
 };
-unsigned int indices_square[] =
+std::vector<unsigned int> indices_square =
 {
     0, 1, 2,
     0, 3, 2,
 };
-unsigned int indices_line2d[] =
+std::vector<unsigned int> indices_line2d =
 {
     0, 2,
 };
@@ -28,13 +29,13 @@ void CppGame::Draw2D::init(Window& window){
     VAO& vao = *new VAO();
     vao.bind();
 
-    VBO& vbo = *new VBO(vertices_square, sizeof(vertices_square));
+    VBO& vbo = *new VBO(vertices_square, Vertex2d::POS_COLOR_TEXTURE);
 
-    EBO& ebo_square = *new EBO(indices_square, sizeof(indices_square));
-    EBO& ebo_line = *new EBO(indices_line2d, sizeof(indices_line2d));
+    EBO& ebo_square = *new EBO(indices_square);
+    EBO& ebo_line = *new EBO(indices_line2d);
 
     // Here GL_STATIC_DRAW says that we want them to be drawn, and we will not change verticies.
-    vao.LinkVBO(vbo, 0, 2, GL_FLOAT, 2 * sizeof(float), 0);
+    vao.LinkVBO(vbo, Vertex2d::POS_COLOR_TEXTURE, (char)2);
 
     // clear up, so VBO and VAO are not used again
     // (!) The order is  important (!)

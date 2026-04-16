@@ -58,37 +58,43 @@ int main(){
     bool first_click = true;
     int x, y;
     int tick = 0;
-    float speed = 0.002f;
-    float sensitivity = 0.05f;
+    float speed = 2.0f;
+    float sensitivity = 7.0f;
     float rotx, roty, rotz;
+    double fps;
+    int modelLoc = glGetUniformLocation(CppGame::shader2_ptr->ID, "model");
+    glfwSwapInterval(1);
+    auto last_time = std::chrono::steady_clock::now();
     while (!window.exitPressed()){
-        model = glm::rotate(model, glm::radians(0.01f), glm::vec3(0.0f, 1.0f, 0.0f));
-        int modelLoc = glGetUniformLocation(CppGame::shader2_ptr->ID, "model");
+        auto current_time = std::chrono::steady_clock::now();
+        std::chrono::duration<float> elapsed = current_time - last_time;
+        last_time = current_time;
+        model = glm::rotate(model, glm::radians(elapsed.count()), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
         if (glfwGetKey(CppGame::window_ptr->window, GLFW_KEY_W)){
-            camera.updatePosition(camera.getForward() * speed);
+            camera.updatePosition(camera.getForward() * speed * elapsed.count());
         }
         if (glfwGetKey(CppGame::window_ptr->window, GLFW_KEY_S)){
-            camera.updatePosition(-camera.getForward() * speed);
+            camera.updatePosition(-camera.getForward() * speed * elapsed.count());
         }
         if (glfwGetKey(CppGame::window_ptr->window, GLFW_KEY_D)){
-            camera.updatePosition(camera.getRight() * speed);
+            camera.updatePosition(camera.getRight() * speed * elapsed.count());
         }
         if (glfwGetKey(CppGame::window_ptr->window, GLFW_KEY_A)){
-            camera.updatePosition(-camera.getRight() * speed);
+            camera.updatePosition(-camera.getRight() * speed * elapsed.count());
         }
         if (glfwGetKey(CppGame::window_ptr->window, GLFW_KEY_SPACE)){
-            camera.updatePosition(camera.getUp() * speed);
+            camera.updatePosition(camera.getUp() * speed * elapsed.count());
         }
         if (glfwGetKey(CppGame::window_ptr->window, GLFW_KEY_LEFT_SHIFT)){
-            camera.updatePosition(-camera.getUp() * speed);
+            camera.updatePosition(-camera.getUp() * speed * elapsed.count());
         }
         if (glfwGetKey(CppGame::window_ptr->window, GLFW_KEY_Q)){
-            rotz = -sensitivity;
+            rotz = -sensitivity * elapsed.count() * 7;
         }
         if (glfwGetKey(CppGame::window_ptr->window, GLFW_KEY_E)){
-            rotz = sensitivity;
+            rotz = sensitivity * elapsed.count() * 7;
         }
         if (glfwGetMouseButton(window.window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
             if (first_click){
@@ -99,8 +105,8 @@ int main(){
             else{
                 CppGame::Mouse::getPosition(&x, &y);
                 CppGame::Mouse::setPosition(0, 0);
-                rotx = -sensitivity * y;
-                roty = -sensitivity * x;
+                rotx = -sensitivity * y * elapsed.count();
+                roty = -sensitivity * x * elapsed.count();
             }
         }
         else{
@@ -117,17 +123,19 @@ int main(){
         
         // sets background color for clear or swap
         window.fill(64, 0, 64, 255);
-        camera.setMatrixUniform(*CppGame::shader2_ptr, "camera");
 
         CppGame::Draw2D::texture(0, 0, texture, tick / 16, tick / 16, 128);
         tick++;
-
-        CppGame::Draw3D::cube(0, 2, 0, 1, 3, 1, 200, 0, 100);
-        CppGame::Draw3D::cube(0, 0, 0, 1, 1, 3, 200, 0, 100);
-        CppGame::Draw3D::cube(0, -1, 0, 10, 1, 10, 20, 20, 20);
+        CppGame::Draw3D::piramid(0, 4, 0, 1, 1, 1, 200, 200, 200);
+        CppGame::Draw3D::cube(0, 2, 0, 1, 3, 1, 200, 200, 200);
+        CppGame::Draw3D::cube(0, 0, 0, 1, 1, 3, 200, 200, 200);
+        CppGame::Draw3D::cube(0, -1, 0, 10, 1, 10, 200, 200, 200);
 
         // swaps two image buffers.
         window.flip();
+        
+        // fps = (double) 1 / elapsed.count();
+        // std::cout << fps << "\n";
     }
 
     // we need to terminate glfw

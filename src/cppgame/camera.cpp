@@ -1,4 +1,5 @@
 #include "include/camera.h"
+#include "include/cppgame.h"
 #include <iostream>
 
 Camera* Camera::main_camera_ptr = nullptr;
@@ -42,8 +43,8 @@ void Camera::setMatrixUniform(Shader& shader, const char* uniform_name){
         view = glm::lookAt(position, position + forward, up);
         proj_times_view = proj * view;
         updated = false;
+        shader.setUniformMatrix(uniform_name, proj_times_view);
     }
-    shader.setUniformMatrix(uniform_name, proj_times_view);
 }
 
 void Camera::setForward(glm::vec3 new_forward, glm::vec3 new_up){
@@ -79,6 +80,7 @@ void Camera::updateOrientation(float rotx, float roty, float rotz){
     if (!const_up){
         forward = glm::rotate(forward, glm::radians(roty), up);
         forward = glm::rotate(forward, glm::radians(rotx), right);
+        up = glm::rotate(up, glm::radians(rotx), right);
         up = glm::rotate(up, glm::radians(rotz), forward);
         right = glm::normalize(glm::cross(forward, up));
         return;
@@ -128,4 +130,8 @@ glm::vec3 Camera::getRight(){
         right = glm::normalize(glm::cross(forward, up));
     }
     return right;
+}
+
+glm::vec3 Camera::getPos(){
+    return position;
 }

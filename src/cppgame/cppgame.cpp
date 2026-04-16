@@ -13,6 +13,8 @@ EBO* CppGame::ebo_square_ptr = nullptr;
 EBO* CppGame::ebo_line2d_ptr = nullptr;
 EBO* CppGame::ebo_cube_ptr = nullptr;
 EBO* CppGame::ebo_line3d_ptr = nullptr;
+Mesh* CppGame::cube = nullptr;
+Mesh* CppGame::piramid = nullptr;
 std::filesystem::path CppGame::PATH = "";
 
 void CppGame::init(){
