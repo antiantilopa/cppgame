@@ -42,7 +42,8 @@ Texture::Texture(const char* image_path, unsigned int filter, unsigned int wrap,
 Texture::Texture(std::filesystem::path& image_path, unsigned int filter, unsigned int wrap, const char* type): Texture(image_path.string().c_str(), filter, wrap, type){}
 Texture::Texture(std::string& image_path, unsigned int filter, unsigned int wrap, const char* type): Texture(image_path.c_str(), filter, wrap, type){}
 
-void Texture::bind(){
+void Texture::bind(unsigned int tex_slot){
+    glActiveTexture(GL_TEXTURE0 + tex_slot);
     glBindTexture(GL_TEXTURE_2D, ID);
 }
 

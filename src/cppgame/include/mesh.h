@@ -20,8 +20,10 @@ public:
     std::vector <Vertex3d> vertices;
     std::vector <unsigned int> indices;
 
+    static std::vector<Vertex3d> EMPTY_VERTICES_VECTOR;
+    static std::vector<unsigned int> EMPTY_INDICES_VECTOR;
     static std::vector<Texture> EMPTY_TEXTURE_VECTOR;
-    Mesh(std::vector<Vertex3d>& vertices, unsigned char mode, std::vector<unsigned int>& indices, std::vector<Texture>& textures = EMPTY_TEXTURE_VECTOR);
+    Mesh(std::vector<Vertex3d>& vertices = EMPTY_VERTICES_VECTOR, unsigned char mode = Vertex3d::NOTHING, std::vector<unsigned int>& indices = EMPTY_INDICES_VECTOR, std::vector<Texture>& textures = EMPTY_TEXTURE_VECTOR);
     void draw(Shader& shader, Camera* camera = nullptr);
 };
 

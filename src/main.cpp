@@ -48,9 +48,10 @@ int main(){
     Mode::setDirection(Mode::DIRECTION_DOWN_RIGHT);
     
     std::cout << (int)Mode::ox << " " << (int)Mode::oy << " " << (int)Mode::x_sign << " " << (int)Mode::y_sign << "\n";
-    std::cout << __FILE__ << ":" << __LINE__ << " " << __FUNCTION__ << "\n";
     
-    Texture texture("deleteme/image.png");
+    Texture image("deleteme/image.png");
+    Texture texture("deleteme/texture.png");
+    Texture background("deleteme/background.png");
     std::cout << texture.width << " " << texture.height << "\n";
     std::cout << abs(-1) << " " << abs(-203) << "\n";
     
@@ -62,16 +63,20 @@ int main(){
     float sensitivity = 7.0f;
     float rotx, roty, rotz;
     double fps;
-    int modelLoc = glGetUniformLocation(CppGame::shader2_ptr->ID, "model");
+    int modelLoc = glGetUniformLocation(CppGame::shader3d_ptr->ID, "model");
     glfwSwapInterval(1);
     auto last_time = std::chrono::steady_clock::now();
     while (!window.exitPressed()){
+        CppGame::shader3d_ptr->activate();
+        CppGame::shader3d_ptr->setUniform("light_color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        // CppGame::shader3d_ptr->setUniform("cam_pos", camera.getPos());
+        
         auto current_time = std::chrono::steady_clock::now();
         std::chrono::duration<float> elapsed = current_time - last_time;
         last_time = current_time;
-        model = glm::rotate(model, glm::radians(elapsed.count()), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(elapsed.count() * 20), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
+        
         if (glfwGetKey(CppGame::window_ptr->window, GLFW_KEY_W)){
             camera.updatePosition(camera.getForward() * speed * elapsed.count());
         }
@@ -124,16 +129,20 @@ int main(){
         // sets background color for clear or swap
         window.fill(64, 0, 64, 255);
 
-        CppGame::Draw2D::texture(0, 0, texture, tick / 16, tick / 16, 128);
+        CppGame::Draw2D::texture(0, 0, background, tick / 16, tick / 16, camera.getPos().x);
         tick++;
-        CppGame::Draw3D::piramid(0, 4, 0, 1, 1, 1, 200, 200, 200);
-        CppGame::Draw3D::cube(0, 2, 0, 1, 3, 1, 200, 200, 200);
-        CppGame::Draw3D::cube(0, 0, 0, 1, 1, 3, 200, 200, 200);
-        CppGame::Draw3D::cube(0, -1, 0, 10, 1, 10, 200, 200, 200);
-
+        texture.bind();
+        texture.texUnit(*CppGame::shader3d_ptr, "tex0", 0);
+        CppGame::Draw3D::piramid(0, 4, 0, 1, 1, 1, 200, 10, 20);
+        CppGame::Draw3D::cube(0, 2, 0, 1, 3, 1, 200, 10, 100);
+        CppGame::Draw3D::cube(0, 0, 0, 1, 1, 3, 200, 10, 100);
+        CppGame::Draw3D::cube(0, -1, 0, 100, 1, 100, 200, 200, 200);
+        CppGame::Draw3D::billboard(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 2.0f), image);
         // swaps two image buffers.
         window.flip();
-        
+        if (glGetError() == GL_INVALID_OPERATION){
+            std::cout << "FVCK\n";
+        }
         // fps = (double) 1 / elapsed.count();
         // std::cout << fps << "\n";
     }

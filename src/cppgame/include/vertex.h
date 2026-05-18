@@ -21,6 +21,7 @@ struct Vertex3d{
     static const inline unsigned char POS_NORMAL_TEXTURE = 0b101;
     static const inline unsigned char POS_COLOR_TEXTURE = 0b110;
     static const inline unsigned char POS_NORMAL_COLOR_TEXTURE = 0b111;
+    static const inline unsigned char NOTHING = 0b11111111;
     
     static const inline unsigned int offset_lookup[8] = {12, 24, 24, 36, 20, 32, 32, 44}; 
     static const inline unsigned int MAX_SIZE = 11;
@@ -38,6 +39,7 @@ struct Vertex2d{
     static const inline unsigned char POS_COLOR = 0b01;
     static const inline unsigned char POS_TEXTURE = 0b10;
     static const inline unsigned char POS_COLOR_TEXTURE = 0b11;
+    static const inline unsigned char NOTHING = 0b11111111;
 
     static const inline unsigned int offset_lookup[4] = {8, 24, 16, 32}; 
     static const inline unsigned int MAX_SIZE = 8;

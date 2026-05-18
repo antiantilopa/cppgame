@@ -4,13 +4,25 @@
 #include <filesystem>
 #include <string>
 #include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 class Shader{
+private:
+    void init(
+        const char* vertex_shader_file = nullptr, 
+        const char* geometry_shader_file = nullptr,
+        const char* fragment_shader_file = nullptr);
 public:
     unsigned int ID;
     bool compiled_correctly;
-    Shader(const char* vertex_shader_file, const char* fragment_shader_file);
-    Shader(const std::filesystem::path& vertex_shader_file, const std::filesystem::path& fragment_shader_file);
+    Shader(
+        const char* vertex_shader_file = nullptr, 
+        const char* geometry_shader_file = nullptr,
+        const char* fragment_shader_file = nullptr);
+    Shader(
+        const std::filesystem::path& vertex_shader_file = std::filesystem::path(), 
+        const std::filesystem::path& geometry_shader_file = std::filesystem::path(), 
+        const std::filesystem::path& fragment_shader_file = std::filesystem::path());
     Shader(const std::string& vertex_shader_file, const std::string& fragment_shader_file);
     ~Shader();
 

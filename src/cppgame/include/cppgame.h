@@ -17,8 +17,10 @@
 
 class CppGame{
 public:
-    static Shader* shader1_ptr;
-    static Shader* shader2_ptr;
+    static Shader* shader2d_ptr;
+    static Shader* shader3d_ptr;
+    static Shader* light_shader3d_ptr;
+    static Shader* billboard_shader3d_ptr;
     static Window* window_ptr;
     static VAO* vao2d_ptr;
     static VAO* vao3d_ptr;
@@ -30,6 +32,7 @@ public:
     static EBO* ebo_line3d_ptr;
     static Mesh* cube;
     static Mesh* piramid;
+    static Mesh* nothing;
 
     static std::filesystem::path PATH;
     static void init();
@@ -65,6 +68,8 @@ public:
         static void line(int line_value[6], char color[3], int width=1);
         static void model(int x, int y, int z, Model& model, char red = 255, char green = 255, char blue = 255);
         static void model(int x, int y, int z, Model& model, char color[3] = nullptr);
+        static void billboard(int x, int y, int z, float angle, int width, int height, Texture& texture);
+        static void billboard(glm::vec3 pos, glm::vec3 direction, glm::vec2 size, Texture& texture);
     };
     class Mouse{
     public:

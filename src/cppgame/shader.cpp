@@ -38,47 +38,70 @@ const char* getShader(const std::string& path){
     return (const char*) result;
 }
 
-Shader::Shader(const char* vertex_shader_file, const char* fragment_shader_file){
-    this->compiled_correctly = true;
-    unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    int compiled_correctly;
-    int maxLength = 0;
-    const char* vertex_shader_src = getShader(vertex_shader_file);
-    glShaderSource(vertex_shader, 1, &vertex_shader_src, NULL);
-    glCompileShader(vertex_shader);
-
-    glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &compiled_correctly);
-    if (compiled_correctly == GL_FALSE){
-        this->compiled_correctly = false;
-        glGetShaderiv(vertex_shader, GL_INFO_LOG_LENGTH, &maxLength);
-        char* errorLog = new char[maxLength];
-        glGetShaderInfoLog(vertex_shader, maxLength, &maxLength, &errorLog[0]);
-        std::cout << "(!) ERROR: vertex shader compilation failed:\n" << &errorLog[0] << std::endl;
-        delete[] errorLog;
-    }
-
-    unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    const char* fragment_shader_src = getShader(fragment_shader_file);
-    glShaderSource(fragment_shader, 1, &fragment_shader_src, NULL);
-    glCompileShader(fragment_shader);
-
-    glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &compiled_correctly);
-    if (compiled_correctly == GL_FALSE){
-        this->compiled_correctly = false;
-        glGetShaderiv(fragment_shader, GL_INFO_LOG_LENGTH, &maxLength);
-        char* errorLog = new char[maxLength];
-        glGetShaderInfoLog(fragment_shader, maxLength, &maxLength, &errorLog[0]);
-        std::cout << "(!) ERROR: fragment shader compilation failed:\n" << &errorLog[0] << std::endl;
-        delete[] errorLog;
-    }
-
+void Shader::init(const char* vertex_shader_file, const char* geometry_shader_file, const char* fragment_shader_file){
     ID = glCreateProgram();
-    glAttachShader(ID, vertex_shader);
-    glAttachShader(ID, fragment_shader);
+    this->compiled_correctly = true;
+    int local_compiled_correctly;
+    int maxLength = 0;
+    unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+    unsigned int geometry_shader = glCreateShader(GL_GEOMETRY_SHADER);
+    unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+
+    if (vertex_shader_file != nullptr){
+        const char* vertex_shader_src = getShader(vertex_shader_file);
+        glShaderSource(vertex_shader, 1, &vertex_shader_src, NULL);
+        glCompileShader(vertex_shader);
+        glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &local_compiled_correctly);
+        if (local_compiled_correctly == GL_FALSE){
+            this->compiled_correctly = false;
+            glGetShaderiv(vertex_shader, GL_INFO_LOG_LENGTH, &maxLength);
+            char* errorLog = new char[maxLength];
+            glGetShaderInfoLog(vertex_shader, maxLength, &maxLength, &errorLog[0]);
+            std::cout << "(!) ERROR: vertex shader compilation failed:\n" << &errorLog[0] << std::endl;
+            delete[] errorLog;
+        }
+        delete[] vertex_shader_src;
+        glAttachShader(ID, vertex_shader);
+    }
+    if (geometry_shader_file != nullptr){
+        const char* geometry_shader_src = getShader(geometry_shader_file);
+        glShaderSource(geometry_shader, 1, &geometry_shader_src, NULL);
+        glCompileShader(geometry_shader);
+
+        glGetShaderiv(geometry_shader, GL_COMPILE_STATUS, &local_compiled_correctly);
+        if (local_compiled_correctly == GL_FALSE){
+            this->compiled_correctly = false;
+            glGetShaderiv(geometry_shader, GL_INFO_LOG_LENGTH, &maxLength);
+            char* errorLog = new char[maxLength];
+            glGetShaderInfoLog(geometry_shader, maxLength, &maxLength, &errorLog[0]);
+            std::cout << "(!) ERROR: geometry shader compilation failed:\n" << &errorLog[0] << std::endl;
+            delete[] errorLog;
+        }
+        delete[] geometry_shader_src;
+        glAttachShader(ID, geometry_shader);
+    }
+
+    if (fragment_shader_file != nullptr){
+        const char* fragment_shader_src = getShader(fragment_shader_file);
+        glShaderSource(fragment_shader, 1, &fragment_shader_src, NULL);
+        glCompileShader(fragment_shader);
+
+        glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &local_compiled_correctly);
+        if (local_compiled_correctly == GL_FALSE){
+            this->compiled_correctly = false;
+            glGetShaderiv(fragment_shader, GL_INFO_LOG_LENGTH, &maxLength);
+            char* errorLog = new char[maxLength];
+            glGetShaderInfoLog(fragment_shader, maxLength, &maxLength, &errorLog[0]);
+            std::cout << "(!) ERROR: fragment shader compilation failed:\n" << &errorLog[0] << std::endl;
+            delete[] errorLog;
+        }
+        delete[] fragment_shader_src;
+        glAttachShader(ID, fragment_shader);
+    }
 
     glLinkProgram(ID);
-    glGetProgramiv(ID, GL_LINK_STATUS, &compiled_correctly);
-    if (compiled_correctly == GL_FALSE){
+    glGetProgramiv(ID, GL_LINK_STATUS, &local_compiled_correctly);
+    if (local_compiled_correctly == GL_FALSE){
         this->compiled_correctly = false;
         glGetProgramiv(ID, GL_INFO_LOG_LENGTH, &maxLength);
         char* errorLog = new char[maxLength];
@@ -86,15 +109,35 @@ Shader::Shader(const char* vertex_shader_file, const char* fragment_shader_file)
         std::cout << "(!) ERROR: shader program linking failed:\n" << &errorLog[0] << std::endl;
         delete[] errorLog;
     }
-
     glDeleteShader(vertex_shader);
+    glDeleteShader(geometry_shader);
     glDeleteShader(fragment_shader);
-
-    delete[] vertex_shader_src;
-    delete[] fragment_shader_src;
 }
-
-Shader::Shader(const std::filesystem::path& vertex_shader_file, const std::filesystem::path& fragment_shader_file) : Shader(vertex_shader_file.string().c_str(), fragment_shader_file.string().c_str()){}
+Shader::Shader(const char* vertex_shader_file, const char* geometry_shader_file, const char* fragment_shader_file){
+    init(vertex_shader_file, geometry_shader_file, fragment_shader_file);
+}
+Shader::Shader(
+    const std::filesystem::path& vertex_shader_file, 
+    const std::filesystem::path& geometry_shader_file, 
+    const std::filesystem::path& fragment_shader_file
+    ){
+    std::string vert_str = vertex_shader_file.string();
+    std::string geom_str = geometry_shader_file.string();
+    std::string frag_str = fragment_shader_file.string();
+    const char* vert_char = vert_str.c_str();
+    const char* geom_char = geom_str.c_str();
+    const char* frag_char = frag_str.c_str();
+    if (vertex_shader_file.empty()){
+        vert_char = nullptr;
+    }
+    if (geometry_shader_file.empty()){
+        geom_char = nullptr;
+    }
+    if (fragment_shader_file.empty()){
+        frag_char =nullptr;
+    }
+    init(vert_char, geom_char, frag_char);
+}
 Shader::Shader(const std::string& vertex_shader_file, const std::string& fragment_shader_file) : Shader(vertex_shader_file.c_str(), fragment_shader_file.c_str()){}
 
 Shader::~Shader(){
@@ -191,11 +234,20 @@ void Shader::setUniform(const char* name, T value){
         glUniform1i(location, value);
     } else if constexpr (std::is_same_v<T, unsigned int>){
         glUniform1ui(location, value);
+    } else if constexpr (std::is_same_v<T, glm::vec2>){
+        glUniform2f(location, value.x, value.y);
+    } else if constexpr (std::is_same_v<T, glm::vec3>){
+        glUniform3f(location, value.x, value.y, value.z);
+    } else if constexpr (std::is_same_v<T, glm::vec4>){
+        glUniform4f(location, value.x, value.y, value.z, value.w);
     } else {
         std::cout << "(!) ERROR: uniform of given type not supported" << std::endl;
     }
 }
 
+template void Shader::setUniform<glm::vec2>(const char* name, glm::vec2 value);
+template void Shader::setUniform<glm::vec3>(const char* name, glm::vec3 value);
+template void Shader::setUniform<glm::vec4>(const char* name, glm::vec4 value);
 template void Shader::setUniform<float>(const char* name, float value);
 template void Shader::setUniform<int>(const char* name, int value);
 template void Shader::setUniform<unsigned int>(const char* name, unsigned int value);

@@ -17,7 +17,7 @@ public:
     Texture(const char* image_path, unsigned int filter = NEAREST, unsigned int wrap = CLAMP_TO_EDGE, const char* type = "diffuse");
     Texture(std::filesystem::path& image_path, unsigned int filter = NEAREST, unsigned int wrap = CLAMP_TO_EDGE, const char* type = "diffuse");
     Texture(std::string& image_path, unsigned int filter = NEAREST, unsigned int wrap = CLAMP_TO_EDGE, const char* type = "diffuse");
-    void bind();
+    void bind(unsigned int tex_slot = 0);
     void unbind();
     void texUnit(Shader& shader, const char* uniform, unsigned int unit);
 };

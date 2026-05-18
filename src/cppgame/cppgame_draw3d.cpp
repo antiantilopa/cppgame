@@ -44,32 +44,46 @@ int const CUBE_TYPE = 0;
 void CppGame::Draw3D::init(Window& window){
     CppGame::cube = new Mesh(vertices_cube, Vertex3d::POS_NORMAL_COLOR, indices_cube);
     CppGame::piramid = new Mesh(vertices_piramid, Vertex3d::POS_NORMAL_COLOR, indices_piramid);
-    Shader& shader_program = *new Shader(CppGame::PATH / "shaders/default3d.vert", CppGame::PATH / "shaders/default3d.frag");
-    if (!shader_program.compiled_correctly){
-        std::cout << "(!!!) ERROR: shader compilation failed!\n";
-        throw "something gone wrong ahh error";
-    }
+    CppGame::nothing = new Mesh();
+    Shader& shader_program = *new Shader(
+        CppGame::PATH / "shaders/default3d.vert", 
+        CppGame::PATH / "shaders/default3d.geom", 
+        CppGame::PATH / "shaders/default3d.frag");
+    Shader& light_shader_program = *new Shader(
+        CppGame::PATH / "shaders/default3d.vert", 
+        CppGame::PATH / "shaders/default3d.geom", 
+        CppGame::PATH / "shaders/light.frag");
+    Shader& billboard_shader_program = *new Shader(
+        CppGame::PATH / "shaders/billboard3d.vert", 
+        CppGame::PATH / "shaders/billboard3d.geom", 
+        CppGame::PATH / "shaders/billboard3d.frag");
     shader_program.activate();
     shader_program.setUniform("window_width", (float)window.width);
     shader_program.setUniform("window_height", (float)window.height);
-
-    shader2_ptr = &shader_program;
+    light_shader_program.activate();
+    light_shader_program.setUniform("window_width", (float)window.width);
+    light_shader_program.setUniform("window_height", (float)window.height);
+    billboard_shader_program.activate();
+    shader3d_ptr = &shader_program;
+    light_shader3d_ptr = &light_shader_program;
+    billboard_shader3d_ptr = &billboard_shader_program;
     window_ptr = &window;
 }
 
 void CppGame::Draw3D::cube(int x, int y, int z, int width, int height, int depth, char red, char green, char blue, int border_width){
     glEnable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
     float color[3] = {(float)(unsigned char)red / 255.0f, (float)(unsigned char)green / 255.0f, (float)(unsigned char)blue / 255.0f};
-    shader2_ptr->activate();
-    shader2_ptr->setUniform("width", (float)width);
-    shader2_ptr->setUniform("height", (float)height);
-    shader2_ptr->setUniform("depth", (float)depth);
-    shader2_ptr->setUniform("x", (float)x);
-    shader2_ptr->setUniform("y", (float)y);
-    shader2_ptr->setUniform("z", (float)z);
-    shader2_ptr->setUniform("color", color, 3);
+    shader3d_ptr->activate();
+    shader3d_ptr->setUniform("width", (float)width);
+    shader3d_ptr->setUniform("height", (float)height);
+    shader3d_ptr->setUniform("depth", (float)depth);
+    shader3d_ptr->setUniform("x", (float)x);
+    shader3d_ptr->setUniform("y", (float)y);
+    shader3d_ptr->setUniform("z", (float)z);
+    shader3d_ptr->setUniform("color", color, 3);
 
-    CppGame::cube->draw(*shader2_ptr);
+    CppGame::cube->draw(*shader3d_ptr);
 }
 void CppGame::Draw3D::cube(int x, int y, int z, int width, int height, int depth, char color[3], int border_width){
     CppGame::Draw3D::cube(x, y, z, width, height, depth, color[0], color[0], color[0], border_width);
@@ -84,17 +98,18 @@ void CppGame::Draw3D::cube(int cube_value[6], char color[3], int border_width){
 
 void CppGame::Draw3D::piramid(int x, int y, int z, int width, int height, int depth, char red, char green, char blue, int border_width){
     glEnable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
     float color[3] = {(float)(unsigned char)red / 255.0f, (float)(unsigned char)green / 255.0f, (float)(unsigned char)blue / 255.0f};
-    shader2_ptr->activate();
-    shader2_ptr->setUniform("width", (float)width);
-    shader2_ptr->setUniform("height", (float)height);
-    shader2_ptr->setUniform("depth", (float)depth);
-    shader2_ptr->setUniform("x", (float)x);
-    shader2_ptr->setUniform("y", (float)y);
-    shader2_ptr->setUniform("z", (float)z);
-    shader2_ptr->setUniform("color", color, 3);
+    shader3d_ptr->activate();
+    shader3d_ptr->setUniform("width", (float)width);
+    shader3d_ptr->setUniform("height", (float)height);
+    shader3d_ptr->setUniform("depth", (float)depth);
+    shader3d_ptr->setUniform("x", (float)x);
+    shader3d_ptr->setUniform("y", (float)y);
+    shader3d_ptr->setUniform("z", (float)z);
+    shader3d_ptr->setUniform("color", color, 3);
 
-    CppGame::piramid->draw(*shader2_ptr);
+    CppGame::piramid->draw(*shader3d_ptr);
 }
 void CppGame::Draw3D::piramid(int x, int y, int z, int width, int height, int depth, char color[3], int border_width){
     CppGame::Draw3D::piramid(x, y, z, width, height, depth, color[0], color[0], color[0], border_width);
@@ -105,4 +120,32 @@ void CppGame::Draw3D::piramid(int piramid_value[6], char red, char green, char b
 }
 void CppGame::Draw3D::piramid(int piramid_value[6], char color[3], int border_width){
     CppGame::Draw3D::piramid(piramid_value[0], piramid_value[1], piramid_value[2], piramid_value[3], piramid_value[4], piramid_value[5], color[0], color[0], color[0], border_width);
+}
+
+void CppGame::Draw3D::billboard(int x, int y, int z, float angle, int width, int height, Texture& texture){
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::rotate(model, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::translate(model, glm::vec3(x, y, z));
+    billboard_shader3d_ptr->activate();
+    billboard_shader3d_ptr->setUniformMatrix("model", model);
+    billboard_shader3d_ptr->setUniform("size", glm::vec2(width, height));
+
+    texture.bind();
+
+    CppGame::nothing->draw(*billboard_shader3d_ptr);
+}
+void CppGame::Draw3D::billboard(glm::vec3 pos, glm::vec3 direction, glm::vec2 size, Texture& texture){
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+    glm::mat4 modelab = glm::mat4(1.0f);
+    modelab = glm::lookAt(-pos * 2.0f, -pos * 2.0f + direction, glm::vec3(0.0f, 1.0f, 0.0f));
+    billboard_shader3d_ptr->activate();
+    billboard_shader3d_ptr->setUniformMatrix("modelab", modelab);
+    billboard_shader3d_ptr->setUniform("size", size);
+
+    texture.bind();
+
+    CppGame::nothing->draw(*billboard_shader3d_ptr);
 }

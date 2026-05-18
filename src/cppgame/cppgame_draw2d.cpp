@@ -43,7 +43,11 @@ void CppGame::Draw2D::init(Window& window){
     vbo.unbind();
     ebo_square.unbind();
     ebo_line.unbind();
-    Shader& shader_program = *new Shader(CppGame::PATH / "shaders/default2d.vert", CppGame::PATH / "shaders/default2d.frag");
+    Shader& shader_program = *new Shader(
+        CppGame::PATH / "shaders/default2d.vert", 
+        std::filesystem::path(),
+        CppGame::PATH / "shaders/default2d.frag"
+    );
     if (!shader_program.compiled_correctly){
         std::cout << "(!!!) ERROR: shader compilation failed!\n";
         throw "something gone wrong ahh error";
@@ -52,7 +56,7 @@ void CppGame::Draw2D::init(Window& window){
     shader_program.setUniform("window_width", (float)window.width);
     shader_program.setUniform("window_height", (float)window.height);
 
-    shader1_ptr = &shader_program;
+    shader2d_ptr = &shader_program;
     window_ptr = &window;
     vao2d_ptr = &vao;
     vbo2d_ptr = &vbo;
@@ -71,14 +75,14 @@ void CppGame::Draw2D::rect(int x, int y, int width, int height, char red, char g
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
     float color[3] = {(float)(unsigned char)red / 255.0f, (float)(unsigned char)green / 255.0f, (float)(unsigned char)blue / 255.0f};
-    shader1_ptr->activate();
-    shader1_ptr->setUniform("width", (float)width);
-    shader1_ptr->setUniform("height", (float)height);
-    shader1_ptr->setUniform("x", (float)(x + (Mode::ox - 1) * (window_ptr->width) / 2) * Mode::x_sign - (Mode::ox - 1) * (width / 2));
-    shader1_ptr->setUniform("y", (float)(y - (Mode::oy - 1) * (window_ptr->height) / 2) * Mode::y_sign + (Mode::oy - 1) * (height / 2));
-    shader1_ptr->setUniform("color", color, 3);
-    shader1_ptr->setUniform("border_width", (float)border_width);
-    shader1_ptr->setUniform("shape_type", SQUARE_TYPE);
+    shader2d_ptr->activate();
+    shader2d_ptr->setUniform("width", (float)width);
+    shader2d_ptr->setUniform("height", (float)height);
+    shader2d_ptr->setUniform("x", (float)(x + (Mode::ox - 1) * (window_ptr->width) / 2) * Mode::x_sign - (Mode::ox - 1) * (width / 2));
+    shader2d_ptr->setUniform("y", (float)(y - (Mode::oy - 1) * (window_ptr->height) / 2) * Mode::y_sign + (Mode::oy - 1) * (height / 2));
+    shader2d_ptr->setUniform("color", color, 3);
+    shader2d_ptr->setUniform("border_width", (float)border_width);
+    shader2d_ptr->setUniform("shape_type", SQUARE_TYPE);
 
     vao2d_ptr->bind();
     vbo2d_ptr->bind();
@@ -107,13 +111,13 @@ void CppGame::Draw2D::rect(int rect_value[4], char color[3], int border_width){
 void CppGame::Draw2D::line(int x1, int y1, int x2, int y2, char red, char green, char blue, int width){
     glDisable(GL_DEPTH_TEST);
     float color[3] = {(float)(unsigned char)red / 255.0f, (float)(unsigned char)green / 255.0f, (float)(unsigned char)blue / 255.0f};
-    shader1_ptr->activate();
-    shader1_ptr->setUniform("x", (float)(x1 + (Mode::ox - 1) * (window_ptr->width) / 2) * Mode::x_sign);
-    shader1_ptr->setUniform("y", (float)(y1 - (Mode::oy - 1) * (window_ptr->height) / 2) * Mode::y_sign);
-    shader1_ptr->setUniform("x2", (float)(x2 + (Mode::ox - 1) * (window_ptr->width) / 2) * Mode::x_sign);
-    shader1_ptr->setUniform("y2", (float)(y2 - (Mode::oy - 1) * (window_ptr->height) / 2) * Mode::y_sign);
-    shader1_ptr->setUniform("color", color, 3);
-    shader1_ptr->setUniform("shape_type", LINE_TYPE);
+    shader2d_ptr->activate();
+    shader2d_ptr->setUniform("x", (float)(x1 + (Mode::ox - 1) * (window_ptr->width) / 2) * Mode::x_sign);
+    shader2d_ptr->setUniform("y", (float)(y1 - (Mode::oy - 1) * (window_ptr->height) / 2) * Mode::y_sign);
+    shader2d_ptr->setUniform("x2", (float)(x2 + (Mode::ox - 1) * (window_ptr->width) / 2) * Mode::x_sign);
+    shader2d_ptr->setUniform("y2", (float)(y2 - (Mode::oy - 1) * (window_ptr->height) / 2) * Mode::y_sign);
+    shader2d_ptr->setUniform("color", color, 3);
+    shader2d_ptr->setUniform("shape_type", LINE_TYPE);
 
     glLineWidth((float)width);
 
@@ -145,16 +149,16 @@ void CppGame::Draw2D::texture(int x, int y, Texture& texture, char red, char gre
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
-    shader1_ptr->activate();
-    shader1_ptr->setUniform("x", (float)(x + (Mode::ox - 1) * (window_ptr->width) / 2) * Mode::x_sign - (Mode::ox - 1) * (texture.width / 2));
-    shader1_ptr->setUniform("y", (float)(y - (Mode::oy - 1) * (window_ptr->height) / 2) * Mode::y_sign + (Mode::oy - 1) * (texture.height / 2));
-    shader1_ptr->setUniform("color", color, 3);
-    shader1_ptr->setUniform("width", (float)texture.width);
-    shader1_ptr->setUniform("height", (float)texture.height);
-    shader1_ptr->setUniform("texture1", 0);
-    shader1_ptr->setUniform("shape_type", TEXTURE_TYPE);
+    shader2d_ptr->activate();
+    shader2d_ptr->setUniform("x", (float)(x + (Mode::ox - 1) * (window_ptr->width) / 2) * Mode::x_sign - (Mode::ox - 1) * (texture.width / 2));
+    shader2d_ptr->setUniform("y", (float)(y - (Mode::oy - 1) * (window_ptr->height) / 2) * Mode::y_sign + (Mode::oy - 1) * (texture.height / 2));
+    shader2d_ptr->setUniform("color", color, 3);
+    shader2d_ptr->setUniform("width", (float)texture.width);
+    shader2d_ptr->setUniform("height", (float)texture.height);
+    shader2d_ptr->setUniform("texture1", 0);
+    shader2d_ptr->setUniform("shape_type", TEXTURE_TYPE);
 
-    glActiveTexture(GL_TEXTURE0);
+    
     texture.bind();
 
     vao2d_ptr->bind();

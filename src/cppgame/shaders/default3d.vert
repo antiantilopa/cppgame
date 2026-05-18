@@ -22,13 +22,19 @@ uniform int shape_type; // 0 for cube, 1 for line // 2 for plane
 uniform mat4 cam_matrix;
 uniform mat4 model;
 
-out vec3 out_color;
-out vec3 relpos;
+out VS_OUT{
+    vec3 out_color;
+    vec3 relpos;
+    vec3 normal;
+    vec3 current_pos;
+} vs_out;
 
 void main(){
     vec4 outputpos = vec4((aPos.x * width + x * 2), (aPos.y * height + y * 2), (aPos.z * depth + z * 2), 1.0);
+    vs_out.current_pos = vec3(model * outputpos);
     gl_Position = cam_matrix * model * outputpos;
-    out_color = color * aColor;
-    relpos = vec3(aPos.x * width / 2, aPos.y * height / 2, aPos.z * depth / 2);
+    vs_out.out_color = color * aColor;
+    vs_out.relpos = aPos;
+    vs_out.normal = aNormal;
     return;
 }

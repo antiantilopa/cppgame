@@ -43,8 +43,9 @@ void Camera::setMatrixUniform(Shader& shader, const char* uniform_name){
         view = glm::lookAt(position, position + forward, up);
         proj_times_view = proj * view;
         updated = false;
-        shader.setUniformMatrix(uniform_name, proj_times_view);
     }
+    shader.activate();
+    shader.setUniformMatrix(uniform_name, proj_times_view);
 }
 
 void Camera::setForward(glm::vec3 new_forward, glm::vec3 new_up){

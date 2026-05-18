@@ -4,12 +4,14 @@
 VBO::VBO(std::vector<Vertex3d> vertices, unsigned char mode){
     glGenBuffers(1, &ID);
     glBindBuffer(GL_ARRAY_BUFFER, ID);
+    if (mode == Vertex3d::NOTHING) return;
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex3d), vertices.data(), GL_STATIC_DRAW);
 }
 
 VBO::VBO(std::vector<Vertex2d> vertices, unsigned char mode){
     glGenBuffers(1, &ID);
     glBindBuffer(GL_ARRAY_BUFFER, ID);
+    if (mode == Vertex2d::NOTHING) return;
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex2d), vertices.data(), GL_STATIC_DRAW);
 }
 

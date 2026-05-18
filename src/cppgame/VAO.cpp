@@ -12,6 +12,9 @@ VAO::~VAO(){
 void VAO::LinkVBO(VBO& VBO, unsigned char mode, char dim){
 	VBO.bind();
 	if (dim == 2){
+		if (mode == Vertex2d::NOTHING){
+			return;
+		}
 		glVertexAttribPointer(0, Vertex2d::POS_SIZE, GL_FLOAT, GL_FALSE, sizeof(Vertex2d), (void*)0);
 		glEnableVertexAttribArray(0);
 		if (mode && Vertex2d::POS_COLOR){
@@ -24,6 +27,9 @@ void VAO::LinkVBO(VBO& VBO, unsigned char mode, char dim){
 		}
 	}
 	if (dim == 3){
+		if (mode == Vertex3d::NOTHING){
+			return;
+		}
 		glVertexAttribPointer(0, Vertex3d::POS_SIZE, GL_FLOAT, GL_FALSE, sizeof(Vertex3d), (void*)0);
 		glEnableVertexAttribArray(0);
 		if (mode && Vertex3d::POS_NORMAL){

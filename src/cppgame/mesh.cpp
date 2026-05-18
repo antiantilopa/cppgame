@@ -2,8 +2,10 @@
 #include <iostream>
 
 std::vector<Texture> Mesh::EMPTY_TEXTURE_VECTOR = {};
+std::vector<Vertex3d> Mesh::EMPTY_VERTICES_VECTOR = {};
+std::vector<unsigned int> Mesh::EMPTY_INDICES_VECTOR = {};
 
-Mesh::Mesh(std::vector <Vertex3d>& vertices, unsigned char mode, std::vector <unsigned int>& indices, std::vector <Texture>& textures){
+Mesh::Mesh(std::vector<Vertex3d>& vertices, unsigned char mode, std::vector<unsigned int>& indices, std::vector<Texture>& textures){
 	this->vertices = vertices;
 	this->indices = indices;
 	this->textures = textures;
@@ -61,7 +63,12 @@ void Mesh::draw(Shader& shader, Camera* camera){
 	glUniform3f(glGetUniformLocation(shader.ID, "cam_pos"), cam_pos.x, cam_pos.y, cam_pos.z);
 	camera->setMatrixUniform(shader, "cam_matrix");
 	// draw the actual mesh
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	if (indices.size() != 0){
+		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	}
+	else{
+		glDrawArrays(GL_POINTS, 0, 1);
+	}
 	this->vao->unbind();
 	this->vbo->unbind();
 	this->ebo->unbind();

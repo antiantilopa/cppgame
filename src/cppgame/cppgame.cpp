@@ -2,8 +2,10 @@
 #include "GLFW/glfw3.h"
 #include <iostream>
 
-Shader* CppGame::shader1_ptr = nullptr;
-Shader* CppGame::shader2_ptr = nullptr;
+Shader* CppGame::shader2d_ptr = nullptr;
+Shader* CppGame::shader3d_ptr = nullptr;
+Shader* CppGame::light_shader3d_ptr = nullptr;
+Shader* CppGame::billboard_shader3d_ptr = nullptr;
 Window* CppGame::window_ptr = nullptr;
 VAO* CppGame::vao2d_ptr = nullptr;
 VAO* CppGame::vao3d_ptr = nullptr;
@@ -15,6 +17,7 @@ EBO* CppGame::ebo_cube_ptr = nullptr;
 EBO* CppGame::ebo_line3d_ptr = nullptr;
 Mesh* CppGame::cube = nullptr;
 Mesh* CppGame::piramid = nullptr;
+Mesh* CppGame::nothing = nullptr;
 std::filesystem::path CppGame::PATH = "";
 
 void CppGame::init(){
