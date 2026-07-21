@@ -8,6 +8,7 @@
 #include <cmath>
 #include <vector>
 #include <chrono>
+#include <stdexcept>
 
 #include "cppgame/include/cppgame.h"
 #include "cppgame/include/VAO.h"
@@ -47,15 +48,10 @@ int main(){
     Mode::setOrigin(Mode::ORIGIN_CENTER);
     Mode::setDirection(Mode::DIRECTION_DOWN_RIGHT);
     
-    std::cout << (int)Mode::ox << " " << (int)Mode::oy << " " << (int)Mode::x_sign << " " << (int)Mode::y_sign << "\n";
-    
     Texture image("deleteme/image.png");
     Texture texture("deleteme/texture.png");
     Texture background("deleteme/background.png");
-    std::cout << texture.width << " " << texture.height << "\n";
-    std::cout << abs(-1) << " " << abs(-203) << "\n";
     
-    glm::mat4 model = glm::mat4(1.0f);
     bool first_click = true;
     int x, y;
     int tick = 0;
@@ -63,19 +59,20 @@ int main(){
     float sensitivity = 7.0f;
     float rotx, roty, rotz;
     double fps;
-    int modelLoc = glGetUniformLocation(CppGame::shader3d_ptr->ID, "model");
     glfwSwapInterval(1);
     auto last_time = std::chrono::steady_clock::now();
+
+    Model scroll = Model("deleteme/scroll/scene.gltf");
+    Model plane = Model("deleteme/plane/scene.gltf");
+
     while (!window.exitPressed()){
         CppGame::shader3d_ptr->activate();
         CppGame::shader3d_ptr->setUniform("light_color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        // CppGame::shader3d_ptr->setUniform("cam_pos", camera.getPos());
+        CppGame::shader3d_ptr->setUniform("light_pos", camera.getPos());
         
         auto current_time = std::chrono::steady_clock::now();
         std::chrono::duration<float> elapsed = current_time - last_time;
         last_time = current_time;
-        model = glm::rotate(model, glm::radians(elapsed.count() * 20), glm::vec3(0.0f, 1.0f, 0.0f));
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         
         if (glfwGetKey(CppGame::window_ptr->window, GLFW_KEY_W)){
             camera.updatePosition(camera.getForward() * speed * elapsed.count());
@@ -131,13 +128,18 @@ int main(){
 
         CppGame::Draw2D::texture(0, 0, background, tick / 16, tick / 16, camera.getPos().x);
         tick++;
-        texture.bind();
-        texture.texUnit(*CppGame::shader3d_ptr, "tex0", 0);
-        CppGame::Draw3D::piramid(0, 4, 0, 1, 1, 1, 200, 10, 20);
-        CppGame::Draw3D::cube(0, 2, 0, 1, 3, 1, 200, 10, 100);
-        CppGame::Draw3D::cube(0, 0, 0, 1, 1, 3, 200, 10, 100);
-        CppGame::Draw3D::cube(0, -1, 0, 100, 1, 100, 200, 200, 200);
+        CppGame::Draw3D::piramid(4, 4, 0, 1, 1, 1, 200, 10, 20);
+        CppGame::Draw3D::cube(4, 2, 0, 1, 1, 1, 200, 10, 100);
+        CppGame::Draw3D::cube(4, 0, 0, 1, 1, 1, 10, 10, 200);
+        CppGame::Draw3D::cube(4, -2, 0, 100, 1, 100, 200, 200, 200);
         CppGame::Draw3D::billboard(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 2.0f), image);
+        plane.draw(*CppGame::shader3d_ptr, camera, glm::vec3(0.0f, 2.0f, 0.0f), glm::quat(1.0f, 0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f));
+        scroll.draw(*CppGame::shader3d_ptr, camera, glm::vec3(0.0f, 2.0f, 4.0f), glm::quat(1.0f, 0.0f, 0.0f, 0.0f), glm::vec3(-0.01f, -0.01f, -0.01f));
+        if (glGetError() == GL_INVALID_OPERATION){
+            std::cout << "this is written once btw flag 1\n";
+            throw std::runtime_error("FUCK!!!!");
+        }
+
         // swaps two image buffers.
         window.flip();
         if (glGetError() == GL_INVALID_OPERATION){

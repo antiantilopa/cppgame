@@ -11,33 +11,6 @@
 
 #include "include/shader.h"
 
-
-const char* getShader(const std::string& path){
-    std::ifstream in(path, std::ios::in);
-    if (!in) {
-        throw std::runtime_error("Failed to open file: " + path);
-    }
-    char x;
-    char* result = new char[16];
-    unsigned int capacity = 16;
-    unsigned int len = 0;
-    while (in >> std::noskipws >> x){
-        result[len] = x;
-        len++;
-        if (len == capacity){
-            char* temp = new char[capacity * 2];
-            std::memcpy(temp, result, capacity);
-            delete[] result;
-            result = temp;
-            capacity *= 2;
-        }
-    }
-    result[len] = '\0';
-
-    in.close();
-    return (const char*) result;
-}
-
 void Shader::init(const char* vertex_shader_file, const char* geometry_shader_file, const char* fragment_shader_file){
     ID = glCreateProgram();
     this->compiled_correctly = true;
@@ -48,7 +21,8 @@ void Shader::init(const char* vertex_shader_file, const char* geometry_shader_fi
     unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 
     if (vertex_shader_file != nullptr){
-        const char* vertex_shader_src = getShader(vertex_shader_file);
+        std::string vertex_shader_src_str = getFileContents(vertex_shader_file);
+        const char* vertex_shader_src = vertex_shader_src_str.c_str();
         glShaderSource(vertex_shader, 1, &vertex_shader_src, NULL);
         glCompileShader(vertex_shader);
         glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &local_compiled_correctly);
@@ -60,11 +34,11 @@ void Shader::init(const char* vertex_shader_file, const char* geometry_shader_fi
             std::cout << "(!) ERROR: vertex shader compilation failed:\n" << &errorLog[0] << std::endl;
             delete[] errorLog;
         }
-        delete[] vertex_shader_src;
         glAttachShader(ID, vertex_shader);
     }
     if (geometry_shader_file != nullptr){
-        const char* geometry_shader_src = getShader(geometry_shader_file);
+        std::string geometry_shader_src_str = getFileContents(geometry_shader_file);
+        const char* geometry_shader_src = geometry_shader_src_str.c_str();
         glShaderSource(geometry_shader, 1, &geometry_shader_src, NULL);
         glCompileShader(geometry_shader);
 
@@ -77,12 +51,12 @@ void Shader::init(const char* vertex_shader_file, const char* geometry_shader_fi
             std::cout << "(!) ERROR: geometry shader compilation failed:\n" << &errorLog[0] << std::endl;
             delete[] errorLog;
         }
-        delete[] geometry_shader_src;
         glAttachShader(ID, geometry_shader);
     }
 
     if (fragment_shader_file != nullptr){
-        const char* fragment_shader_src = getShader(fragment_shader_file);
+        std::string fragment_shader_src_str = getFileContents(fragment_shader_file);
+        const char* fragment_shader_src = fragment_shader_src_str.c_str();
         glShaderSource(fragment_shader, 1, &fragment_shader_src, NULL);
         glCompileShader(fragment_shader);
 
@@ -95,7 +69,6 @@ void Shader::init(const char* vertex_shader_file, const char* geometry_shader_fi
             std::cout << "(!) ERROR: fragment shader compilation failed:\n" << &errorLog[0] << std::endl;
             delete[] errorLog;
         }
-        delete[] fragment_shader_src;
         glAttachShader(ID, fragment_shader);
     }
 
@@ -150,7 +123,10 @@ void Shader::activate(){
 
 template<typename T>
 void Shader::setUniform(const char* name, T* value_ptr, int dim){
+    // Ensure program is active before setting uniforms
+    activate();
     int location = glGetUniformLocation(ID, name);
+    
     if (location == -1){
         std::cout << "(!) WARNING: uniform '" << name << "' not found in shader program" << std::endl;
         return;
@@ -223,7 +199,10 @@ template void Shader::setUniform<unsigned int>(const char* name, unsigned int* v
 
 template<typename T>
 void Shader::setUniform(const char* name, T value){
+    // Ensure program is active before setting uniforms
+    activate();
     int location = glGetUniformLocation(ID, name);
+    
     if (location == -1){
         std::cout << "(!) WARNING: uniform '" << name << "' not found in shader program" << std::endl;
         return;
@@ -253,7 +232,10 @@ template void Shader::setUniform<int>(const char* name, int value);
 template void Shader::setUniform<unsigned int>(const char* name, unsigned int value);
 
 void Shader::setUniformMatrix(const char* name, glm::mat4 value){
+    // Ensure program is active before setting uniforms
+    activate();
     int location = glGetUniformLocation(ID, name);
+    
     if (location == -1){
         std::cout << "(!) WARNING: uniform '" << name << "' not found in shader program" << std::endl;
         return;
@@ -261,7 +243,10 @@ void Shader::setUniformMatrix(const char* name, glm::mat4 value){
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 void Shader::setUniformMatrix(const char* name, glm::mat3 value){
+    // Ensure program is active before setting uniforms
+    activate();
     int location = glGetUniformLocation(ID, name);
+    
     if (location == -1){
         std::cout << "(!) WARNING: uniform '" << name << "' not found in shader program" << std::endl;
         return;
@@ -269,7 +254,10 @@ void Shader::setUniformMatrix(const char* name, glm::mat3 value){
     glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 void Shader::setUniformMatrix(const char* name, glm::mat2 value){
+    // Ensure program is active before setting uniforms
+    activate();
     int location = glGetUniformLocation(ID, name);
+    
     if (location == -1){
         std::cout << "(!) WARNING: uniform '" << name << "' not found in shader program" << std::endl;
         return;

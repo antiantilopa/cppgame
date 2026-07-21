@@ -2,14 +2,14 @@
 #include <iostream>
 
 std::vector<Vertex3d> vertices_cube = {
-    Vertex3d{glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-    Vertex3d{glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(0.0f, 0.0f, 1.0f)},
-    Vertex3d{glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f)},
-    Vertex3d{glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(0.0f, 1.0f, 1.0f)},
-    Vertex3d{glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f)},
-    Vertex3d{glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3(1.0f, 0.0f, 1.0f)},
-    Vertex3d{glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 0.0f)},
-    Vertex3d{glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3(1.0f, 1.0f, 1.0f)},
+    Vertex3d{glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+    Vertex3d{glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+    Vertex3d{glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+    Vertex3d{glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(0.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+    Vertex3d{glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
+    Vertex3d{glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3(1.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+    Vertex3d{glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
+    Vertex3d{glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
 };
 std::vector<Vertex3d> vertices_piramid = {
     Vertex3d{glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(-0.5f, 0.0f,  0.5f), glm::vec3(-0.5f, 0.0f,  0.5f)}, 
@@ -75,15 +75,11 @@ void CppGame::Draw3D::cube(int x, int y, int z, int width, int height, int depth
     glDisable(GL_BLEND);
     float color[3] = {(float)(unsigned char)red / 255.0f, (float)(unsigned char)green / 255.0f, (float)(unsigned char)blue / 255.0f};
     shader3d_ptr->activate();
-    shader3d_ptr->setUniform("width", (float)width);
-    shader3d_ptr->setUniform("height", (float)height);
-    shader3d_ptr->setUniform("depth", (float)depth);
-    shader3d_ptr->setUniform("x", (float)x);
-    shader3d_ptr->setUniform("y", (float)y);
-    shader3d_ptr->setUniform("z", (float)z);
+    glm::vec3 trans = glm::vec3(x, y, z);
+    glm::vec3 scale = glm::vec3(width, height, depth);
     shader3d_ptr->setUniform("color", color, 3);
 
-    CppGame::cube->draw(*shader3d_ptr);
+    CppGame::cube->draw(*shader3d_ptr, Camera::main_camera_ptr, glm::mat4(1.0f), trans, glm::quat(1.0f, 0.0f, 0.0f, 0.0f), scale);
 }
 void CppGame::Draw3D::cube(int x, int y, int z, int width, int height, int depth, char color[3], int border_width){
     CppGame::Draw3D::cube(x, y, z, width, height, depth, color[0], color[0], color[0], border_width);
@@ -101,15 +97,11 @@ void CppGame::Draw3D::piramid(int x, int y, int z, int width, int height, int de
     glDisable(GL_BLEND);
     float color[3] = {(float)(unsigned char)red / 255.0f, (float)(unsigned char)green / 255.0f, (float)(unsigned char)blue / 255.0f};
     shader3d_ptr->activate();
-    shader3d_ptr->setUniform("width", (float)width);
-    shader3d_ptr->setUniform("height", (float)height);
-    shader3d_ptr->setUniform("depth", (float)depth);
-    shader3d_ptr->setUniform("x", (float)x);
-    shader3d_ptr->setUniform("y", (float)y);
-    shader3d_ptr->setUniform("z", (float)z);
+    glm::vec3 trans = glm::vec3(x, y, z);
+    glm::vec3 scale = glm::vec3(width, height, depth);
     shader3d_ptr->setUniform("color", color, 3);
 
-    CppGame::piramid->draw(*shader3d_ptr);
+    CppGame::piramid->draw(*shader3d_ptr, Camera::main_camera_ptr, glm::mat4(1.0f), trans, glm::quat(1.0f, 0.0f, 0.0f, 0.0f), scale);
 }
 void CppGame::Draw3D::piramid(int x, int y, int z, int width, int height, int depth, char color[3], int border_width){
     CppGame::Draw3D::piramid(x, y, z, width, height, depth, color[0], color[0], color[0], border_width);
@@ -139,13 +131,31 @@ void CppGame::Draw3D::billboard(int x, int y, int z, float angle, int width, int
 void CppGame::Draw3D::billboard(glm::vec3 pos, glm::vec3 direction, glm::vec2 size, Texture& texture){
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
+    if (glGetError() == GL_INVALID_OPERATION){
+            std::cout << "this is written once btw flag 1\n";
+            throw std::runtime_error("FUCK!!!!");
+        }
     glm::mat4 modelab = glm::mat4(1.0f);
     modelab = glm::lookAt(-pos * 2.0f, -pos * 2.0f + direction, glm::vec3(0.0f, 1.0f, 0.0f));
     billboard_shader3d_ptr->activate();
     billboard_shader3d_ptr->setUniformMatrix("modelab", modelab);
+    if (glGetError() == GL_INVALID_OPERATION){
+            std::cout << "this is written once btw flag 1\n";
+            throw std::runtime_error("FUCK!!!!");
+        }
     billboard_shader3d_ptr->setUniform("size", size);
 
+    texture.texUnit(*billboard_shader3d_ptr, "tex");
     texture.bind();
+    if (glGetError() == GL_INVALID_OPERATION){
+            std::cout << "this is written once btw flag 1\n";
+            throw std::runtime_error("FUCK!!!!");
+        }
 
     CppGame::nothing->draw(*billboard_shader3d_ptr);
+    texture.unbind();
+    if (glGetError() == GL_INVALID_OPERATION){
+            std::cout << "this is written once btw flag 1\n";
+            throw std::runtime_error("FUCK!!!!");
+        }
 }

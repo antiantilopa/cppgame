@@ -12,7 +12,7 @@ Camera::Camera(){
     this->right = glm::vec3(-1.0f, 0.0f, 0.0f);
     this->position = glm::vec3(0.0f, 0.0f, 0.0f);
     this->near_plane = 0.01f;
-    this->far_plane = 100.0f;
+    this->far_plane = 1000.0f;
     this->fov = half_pi / 2; // 45 degrees
     this->min_pitch = glm::radians(5.0f);
     this->const_up = true;
@@ -56,15 +56,15 @@ void Camera::setForward(glm::vec3 new_forward, glm::vec3 new_up){
     }
     if (new_up == glm::vec3(0.0f)){
         if (glm::dot(up, forward) != 0.0f){
-            std::cerr << "ERROR: old up forward is not perpendicular to forward\nERROR: WHICH IS RIDICULUS!!!";
-            throw "floating point ahh error";
+            std::cerr << "ERROR: old up is not perpendicular to new forward\nERROR: WHICH IS RIDICULUS!!!";
+            throw "(maybe) floating point ahh error";
         }
         updated = true;
         return;
     }
     if (glm::dot(new_up, forward) != 0.0f){
-        std::cerr << "ERROR: new up forward is not perpendicular to forward";
-        throw "(!) maybe (!) floating point ahh error";
+        std::cerr << "ERROR: new up is not perpendicular to forward";
+        throw "(maybe) floating point ahh error";
     }
     up = glm::normalize(new_up);
     updated = true;
