@@ -19,6 +19,9 @@ void main()
    }
    if (shape_type == 2){
       FragColor = texture(texture1, out_tex_coord) * out_color;
+      if (FragColor.a < 0.1f){
+         discard;
+      }
       return;
    }
    if (border_width < 0.0f){

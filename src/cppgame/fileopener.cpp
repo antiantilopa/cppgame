@@ -23,7 +23,9 @@ std::string getFileContents(const std::string& path){
 std::string getFileContents(const char* path){
     std::ifstream in(path, std::ios::binary);
 	if (!in){
-        throw(errno);
+        std::cout << path << std::endl;
+        std::cout << errno << std::endl;
+        throw(std::runtime_error("cannot open given path"));
     }
     std::string contents;
     in.seekg(0, std::ios::end);

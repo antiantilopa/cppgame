@@ -11,6 +11,22 @@ const unsigned int Texture::NEAREST = GL_NEAREST;
 const unsigned int Texture::REPEAT = GL_REPEAT;
 const unsigned int Texture::CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE;
 
+Texture::Texture(unsigned int width, unsigned int height, const char* type, unsigned int unit, unsigned int filter, unsigned int wrap){
+    this->unit = unit;
+    this->type = type;
+    this->width = width;
+    this->height = height;
+    this->channel_num = 4;
+    glGenTextures(1, &ID);
+    glBindTexture(GL_TEXTURE_2D, ID);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+}
+
 Texture::Texture(const char* image_path, const char* type, unsigned int unit, unsigned int filter, unsigned int wrap){
     stbi_set_flip_vertically_on_load(true);
     this->unit = unit;

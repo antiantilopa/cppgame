@@ -85,6 +85,10 @@ void Shader::init(const char* vertex_shader_file, const char* geometry_shader_fi
     glDeleteShader(vertex_shader);
     glDeleteShader(geometry_shader);
     glDeleteShader(fragment_shader);
+    if (!compiled_correctly){
+        std::cout << "(!!!) ERROR: shader compilation failed!\n";
+        throw "something gone wrong ahh error";
+    }
 }
 Shader::Shader(const char* vertex_shader_file, const char* geometry_shader_file, const char* fragment_shader_file){
     init(vertex_shader_file, geometry_shader_file, fragment_shader_file);
@@ -209,6 +213,10 @@ void Shader::setUniform(const char* name, T value){
     }
     if constexpr (std::is_same_v<T, float>){
         glUniform1f(location, value);
+    } else if constexpr (std::is_same_v<T, char>){
+        glUniform1i(location, value);
+    } else if constexpr (std::is_same_v<T, unsigned char>){
+        glUniform1ui(location, value);
     } else if constexpr (std::is_same_v<T, int>){
         glUniform1i(location, value);
     } else if constexpr (std::is_same_v<T, unsigned int>){

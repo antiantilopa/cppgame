@@ -21,7 +21,7 @@ Mesh* CppGame::nothing = nullptr;
 std::filesystem::path CppGame::PATH = "";
 
 void CppGame::init(){
-    CppGame::PATH = std::filesystem::path(__FILE__).parent_path();
+    CppGame::PATH = std::filesystem::current_path() / "cppgame";
     // say glfw what version of OpenGL we will use
     // version is 3.3
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // 3.
