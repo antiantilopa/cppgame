@@ -131,18 +131,19 @@ void CppGame::Draw3D::billboard(int x, int y, int z, float angle, int width, int
 void CppGame::Draw3D::billboard(glm::vec3 pos, glm::vec3 direction, glm::vec2 size, Texture& texture){
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
-    if (glGetError() == GL_INVALID_OPERATION){
+    if (glGetError() == GL_INVALID_OPERATION) {
             std::cout << "this is written once btw flag 1\n";
             throw std::runtime_error("FUCK!!!!");
-        }
+    }
+    
     glm::mat4 modelab = glm::mat4(1.0f);
     modelab = glm::lookAt(-pos * 2.0f, -pos * 2.0f + direction, glm::vec3(0.0f, 1.0f, 0.0f));
     billboard_shader3d_ptr->activate();
     billboard_shader3d_ptr->setUniformMatrix("modelab", modelab);
-    if (glGetError() == GL_INVALID_OPERATION){
+    if (glGetError() == GL_INVALID_OPERATION) {
             std::cout << "this is written once btw flag 1\n";
             throw std::runtime_error("FUCK!!!!");
-        }
+    }
     billboard_shader3d_ptr->setUniform("size", size);
 
     texture.texUnit(*billboard_shader3d_ptr, "tex");
@@ -150,12 +151,12 @@ void CppGame::Draw3D::billboard(glm::vec3 pos, glm::vec3 direction, glm::vec2 si
     if (glGetError() == GL_INVALID_OPERATION){
             std::cout << "this is written once btw flag 1\n";
             throw std::runtime_error("FUCK!!!!");
-        }
+    }
 
     CppGame::nothing->draw(*billboard_shader3d_ptr);
     texture.unbind();
     if (glGetError() == GL_INVALID_OPERATION){
             std::cout << "this is written once btw flag 1\n";
             throw std::runtime_error("FUCK!!!!");
-        }
+    }
 }

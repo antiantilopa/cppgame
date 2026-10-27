@@ -28,12 +28,13 @@
 int WIDTH = 800;
 int HEIGHT = 600;
 
-int abs(int x){
-    if (x < 0){
+int abs(int x) {
+    if (x < 0) {
         return -x;
     }
     return x;
 }
+
 int main(){
     CppGame::init();
     Window window = Window(WIDTH, HEIGHT, "title");
@@ -57,7 +58,7 @@ int main(){
     int tick = 0;
     float speed = 2.0f;
     float sensitivity = 7.0f;
-    float rotx, roty, rotz;
+    float rotx = 0, roty = 0, rotz = 0;
     double fps;
     glfwSwapInterval(1);
     auto last_time = std::chrono::steady_clock::now();
@@ -115,11 +116,12 @@ int main(){
             first_click = false;
             glfwSetInputMode(window.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
-        
+
         camera.updateOrientation(rotx, roty, rotz);
         rotx = 0.0f;
         roty = 0.0f;
         rotz = 0.0f;
+        
         // clear all events 
         glfwPollEvents();
         
