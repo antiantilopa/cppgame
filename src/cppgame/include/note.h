@@ -1,5 +1,4 @@
-#ifndef CPPGAME_NOTE_H
-#define CPPGAME_NOTE_H
+#pragma once
 
 #include <vector>
 #include <filesystem>
@@ -12,4 +11,3 @@ class Note{
     std::vector<Note> load(std::filesystem::path path);
 };
 
-#endif

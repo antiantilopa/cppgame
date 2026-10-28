@@ -1,5 +1,4 @@
-#ifndef TEXTURE_H
-#define TEXTURE_H
+#pragma once
 
 #include <filesystem>
 #include <string>
@@ -26,4 +25,3 @@ public:
 
 
 
-#endif

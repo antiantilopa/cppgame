@@ -1,5 +1,4 @@
-#ifndef CPPGAME_FBO_H
-#define CPPGAME_FBO_H
+#pragma once
 
 #include <glad/glad.h>
 #include "texture.h"
@@ -17,4 +16,3 @@ public:
     void setup(Texture& output); //setup FBO before drawing on it
 };
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef CPPGAME_SYNTHS_H
-#define CPPGAME_SYNTHS_H
+#pragma once
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -39,4 +38,3 @@ public:
 
 bool LoadWavAsShorts(std::filesystem::path& path, std::vector<short>& output, WAVEFORMATEX& output_fmt);
 void PlayShortsVector(const std::vector<short>& samples, const WAVEFORMATEX& fmt, bool loop = false); 
-#endif

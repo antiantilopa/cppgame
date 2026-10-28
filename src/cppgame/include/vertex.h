@@ -1,5 +1,4 @@
-#ifndef VERTEX_H
-#define VERTEX_H
+#pragma once
 
 #include "glm/glm.hpp"
 
@@ -45,4 +44,3 @@ struct Vertex2d{
     static const inline unsigned int MAX_SIZE = 8;
 };
 
-#endif

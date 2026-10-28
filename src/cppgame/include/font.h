@@ -1,5 +1,4 @@
-#ifndef CPPGAME_FONT_H
-#define CPPGAME_FONT_H
+#pragma once
 
 #include "texture.h"
 #include "fileopener.h"
@@ -37,4 +36,3 @@ public:
     Texture& render(std::string text, Shader& shader);
 };
 
-#endif

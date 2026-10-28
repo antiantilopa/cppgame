@@ -1,5 +1,4 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#pragma once
 
 #include <glad/glad.h>
 #include "GLFW/glfw3.h"
@@ -18,4 +17,3 @@ public:
     void fill(unsigned int r, unsigned int g, unsigned int b, unsigned int a);
 };
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef MESH_H
-#define MESH_H
+#pragma once
 
 #include "VBO.h"
 #include "VAO.h"
@@ -34,4 +33,3 @@ public:
     );
 };
 
-#endif

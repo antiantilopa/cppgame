@@ -1,5 +1,4 @@
-#ifndef MODEL_H
-#define MODEL_h
+#pragma once
 
 #include "vbo.h"
 #include "ebo.h"
@@ -58,4 +57,3 @@ private:
     std::vector<Texture> getTextures();
 };
 
-#endif 

@@ -1,5 +1,4 @@
-#ifndef VBO_H
-#define VBO_H
+#pragma once
 
 #include <glad/glad.h>
 #include <vector>
@@ -19,4 +18,3 @@ public:
 	void Delete();
 };
 
-#endif

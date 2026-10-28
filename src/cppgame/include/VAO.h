@@ -1,5 +1,4 @@
-#ifndef VAO_H
-#define VAO_H
+#pragma once
 
 #include "VBO.h"
 #include <glad/glad.h>
@@ -21,4 +20,3 @@ public:
 
 
 
-#endif

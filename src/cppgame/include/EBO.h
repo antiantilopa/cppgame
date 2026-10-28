@@ -1,5 +1,4 @@
-#ifndef EBO_CLASS_H
-#define EBO_CLASS_H
+#pragma once
 
 #include <vector>
 
@@ -14,4 +13,3 @@ public:
 	void Delete();
 };
 
-#endif
