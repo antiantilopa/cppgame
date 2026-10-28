@@ -33,16 +33,12 @@ int HEIGHT = 600;
 using namespace std;
 
 int main(){
-    cout << 1 << "\n";
     CoreGeometry::init();
-    cout << 1 << "\n";
     Window window = Window(WIDTH, HEIGHT, "title");
     
-    cout << 1 << "\n";
 
     CppGame::Draw3D::init(window);
     CppGame::Draw2D::init(window);
-    cout << 1 << "\n";
 
     Camera camera = Camera();
     camera.const_up = false;
@@ -51,13 +47,11 @@ int main(){
     Mode::setOrigin(Mode::ORIGIN_CENTER);
     Mode::setDirection(Mode::DIRECTION_DOWN_RIGHT);
     
-    cout << 1 << "\n";
 
     Texture image("deleteme/image.png");
     Texture texture("deleteme/texture.png");
     Texture background("deleteme/background.png");
 
-    cout << 1 << "\n";
 
     bool first_click = true;
     int x, y;
@@ -72,9 +66,8 @@ int main(){
     Model scroll = Model("deleteme/scroll/scene.gltf");
     Model plane = Model("deleteme/plane/scene.gltf");
 
-    cout << 1 << "\n";
 
-    while (!window.exitPressed()){
+    while (!window.exitPressed()) {
         CoreGeometry::shader3d_ptr->activate();
         CoreGeometry::shader3d_ptr->setUniform("light_color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
         CoreGeometry::shader3d_ptr->setUniform("light_pos", camera.getPos());
@@ -121,7 +114,7 @@ int main(){
             }
         }
         else{
-            first_click = false;
+            first_click = true;
             glfwSetInputMode(window.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
 

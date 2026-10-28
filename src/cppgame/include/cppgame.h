@@ -15,3 +15,5 @@
 #include "core_geometry.h"
 #include "draw2d.h"
 #include "draw3d.h"
+#include "renderer.h"
+#include "opengl_renderer.h"
