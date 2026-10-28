@@ -6,6 +6,8 @@ Camera* Camera::main_camera_ptr = nullptr;
 
 const float half_pi = 1.5707964f;
 
+using namespace CppGame;
+
 Camera::Camera(){
     this->forward = glm::vec3(0.0f, 0.0f, 1.0f);
     this->up = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -16,7 +18,7 @@ Camera::Camera(){
     this->fov = half_pi / 2; // 45 degrees
     this->min_pitch = glm::radians(5.0f);
     this->const_up = true;
-    this->proj = glm::perspective(fov, CppGame::window_ptr->aspect, near_plane, far_plane);
+    this->proj = glm::perspective(fov, CoreGeometry::window_ptr->aspect, near_plane, far_plane);
     this->updated = true;
     Camera::main_camera_ptr = this;
 }
@@ -29,7 +31,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 forward, glm::vec3 up, float near_p
     this->far_plane = far_plane;
     this->fov = fov;
     this->const_up = const_up;
-    this->proj = glm::perspective(fov, CppGame::window_ptr->aspect, near_plane, far_plane);
+    this->proj = glm::perspective(fov, CoreGeometry::window_ptr->aspect, near_plane, far_plane);
     this->updated = true;
     Camera::main_camera_ptr = this;
 }
@@ -104,17 +106,17 @@ void Camera::updatePosition(glm::vec3 offset){
 
 void Camera::setNearPlane(float value){
     near_plane = value;
-    this->proj = glm::perspective(fov, CppGame::window_ptr->aspect, near_plane, far_plane);
+    this->proj = glm::perspective(fov, CoreGeometry::window_ptr->aspect, near_plane, far_plane);
     updated = true;
 }
 void Camera::setFarPlane(float value){
     far_plane = value;
-    this->proj = glm::perspective(fov, CppGame::window_ptr->aspect, near_plane, far_plane);
+    this->proj = glm::perspective(fov, CoreGeometry::window_ptr->aspect, near_plane, far_plane);
     updated = true;
 }
 void Camera::setFov(float value){
     fov = value;
-    this->proj = glm::perspective(fov, CppGame::window_ptr->aspect, near_plane, far_plane);
+    this->proj = glm::perspective(fov, CoreGeometry::window_ptr->aspect, near_plane, far_plane);
     updated = true;
 }
 

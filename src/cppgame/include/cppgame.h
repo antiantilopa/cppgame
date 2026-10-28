@@ -1,5 +1,4 @@
-#ifndef CPPGAME_H
-#define CPPGAME_H
+#pragma once
 
 #include "shader.h"
 #include "window.h"
@@ -13,80 +12,6 @@
 #include "vertex.h"
 #include "mesh.h"
 #include "font.h"
-
-#include <string>
-#include <filesystem>
-
-class CppGame{
-public:
-    static Shader* shader2d_ptr;
-    static Shader* shader3d_ptr;
-    static Shader* light_shader3d_ptr;
-    static Shader* billboard_shader3d_ptr;
-    static Window* window_ptr;
-    static VAO* vao2d_ptr;
-    static VAO* vao3d_ptr;
-    static VBO* vbo2d_ptr;
-    static VBO* vbo3d_ptr;
-    static EBO* ebo_square_ptr;
-    static EBO* ebo_line2d_ptr;
-    static EBO* ebo_cube_ptr;
-    static EBO* ebo_line3d_ptr;
-    static Mesh* cube;
-    static Mesh* piramid;
-    static Mesh* nothing;
-
-    static std::filesystem::path PATH;
-    static void init();
-
-    class Draw2D{
-    public:
-        static void init(Window& window);
-        static void rect(int x, int y, int width, int height, char red, char green, char blue, int border_width=-1, Shader* shader = nullptr);
-        static void rect(int x, int y, int width, int height, char color[3], int border_width=-1, Shader* shader = nullptr);
-        static void rect(int rect_value[4], char red, char green, char blue, int border_width=-1, Shader* shader = nullptr);
-        static void rect(int rect_value[4], char color[3], int border_width=-1, Shader* shader = nullptr);
-        static void line(int x1, int y1, int x2, int y2, char red, char green, char blue, int width=1, Shader* shader = nullptr);
-        static void line(int x1, int y1, int x2, int y2, char color[3], int width=1, Shader* shader = nullptr);
-        static void line(int line_value[4], char red, char green, char blue, int width=1, Shader* shader = nullptr);
-        static void line(int line_value[4], char color[3], int width=1, Shader* shader = nullptr);
-        static void texture(int x, int y, Texture& texture, char red = 255, char green = 255, char blue = 255, int size = 1, Shader* shader = nullptr);
-        static void texture(int x, int y, Texture& texture, char color[3] = nullptr, int size = 1, Shader* shader = nullptr);
-    };
-    class Draw3D{
-    public:
-        static void init(Window& window);
-        static void cube(int x, int y, int z, int width, int height, int depth, char red, char green, char blue, int border_width=-1);
-        static void cube(int x, int y, int z, int width, int height, int depth, char color[3], int border_width=-1);
-        static void cube(int cube_value[6], char red, char green, char blue, int border_width=-1);
-        static void cube(int cube_value[6], char color[3], int border_width=-1);
-        static void piramid(int x, int y, int z, int width, int height, int depth, char red, char green, char blue, int border_width=-1);
-        static void piramid(int x, int y, int z, int width, int height, int depth, char color[3], int border_width=-1);
-        static void piramid(int cube_value[6], char red, char green, char blue, int border_width=-1);
-        static void piramid(int cube_value[6], char color[3], int border_width=-1);
-        static void line(int x1, int y1, int z1, int x2, int y2, int z2, char red, char green, char blue, int width=1);
-        static void line(int x1, int y1, int z1, int x2, int y2, int z2, char color[3], int width=1);
-        static void line(int line_value[6], char red, char green, char blue, int width=1);
-        static void line(int line_value[6], char color[3], int width=1);
-        static void model(int x, int y, int z, Model& model, char red = 255, char green = 255, char blue = 255);
-        static void model(int x, int y, int z, Model& model, char color[3] = nullptr);
-        static void billboard(int x, int y, int z, float angle, int width, int height, Texture& texture);
-        static void billboard(glm::vec3 pos, glm::vec3 direction, glm::vec2 size, Texture& texture);
-    };
-    class Mouse{
-    public:
-        template<typename T>
-        static void getPosition(T* x, T* y);
-        template<typename T>
-        static T* getPosition(); // creates new obhect on heap! needs deleting
-        template<typename T>
-        static void getPosition(T* position); // position has to be array of at least size 2.
-
-        template<typename T>
-        static void setPosition(T x, T y);
-        template<typename T>
-        static void setPosition(T* position); // position has to be array of at least size 2.
-    };
-};
-
-#endif
+#include "core_geometry.h"
+#include "draw2d.h"
+#include "draw3d.h"
