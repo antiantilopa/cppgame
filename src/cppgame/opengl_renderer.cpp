@@ -13,6 +13,14 @@ Window OpenGLRenderer::init(int width, int height, std::string title) {
     return window;
 }
 
+void OpenGLRenderer::preupdate() {
+
+}
+
+void OpenGLRenderer::postupdate() {
+
+}
+
 void OpenGLRenderer::predraw() {
     window.fill(64, 0, 64, 255);
 }

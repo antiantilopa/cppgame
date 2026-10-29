@@ -13,6 +13,9 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
 )
 
 add_executable(cppgame ${SOURCES})
+set_target_properties(cppgame PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src"
+)
 
 target_include_directories(cppgame PRIVATE ${LIB_DIR}/include)
 
