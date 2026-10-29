@@ -35,6 +35,8 @@ float sensitivity = 7.0f;
 std::chrono::duration<float> elapsed;
 bool releasemouse = true;
 
+glm::vec3 velocity{};
+
 using namespace std;
 
 void onrightclick(){
@@ -98,7 +100,9 @@ int main(){
 
     bool first_click = true;
     int tick = 0;
-    float speed = 2.0f;
+    float speed = 5.0f;
+    float acceleration = 3.0f;
+    float friction = 0.98f;
     double fps;
     glfwSwapInterval(1);
     auto last_time = std::chrono::steady_clock::now();
@@ -122,28 +126,30 @@ int main(){
         auto current_time = std::chrono::steady_clock::now();
         elapsed = current_time - last_time;
         last_time = current_time;
-        if (glfwGetKey(Window::window_ptr->window, GLFW_KEY_W)){
-            camera.updatePosition(camera.getForward() * speed * elapsed.count());
+        camera.updatePosition(velocity * speed * elapsed.count());
+        if (Key::isPressed(GLFW_KEY_W)){
+            velocity += camera.getForward() * acceleration * elapsed.count();
         }
-        if (glfwGetKey(Window::window_ptr->window, GLFW_KEY_S)){
-            camera.updatePosition(-camera.getForward() * speed * elapsed.count());
+        if (Key::isPressed(GLFW_KEY_S)){
+            velocity -= camera.getForward() * acceleration * elapsed.count();
         }
-        if (glfwGetKey(Window::window_ptr->window, GLFW_KEY_D)){
-            camera.updatePosition(camera.getRight() * speed * elapsed.count());
+        if (Key::isPressed(GLFW_KEY_D)){
+            velocity += camera.getRight() * acceleration * elapsed.count();
         }
-        if (glfwGetKey(Window::window_ptr->window, GLFW_KEY_A)){
-            camera.updatePosition(-camera.getRight() * speed * elapsed.count());
+        if (Key::isPressed(GLFW_KEY_A)){
+            velocity -= camera.getRight() * acceleration * elapsed.count();
         }
-        if (glfwGetKey(Window::window_ptr->window, GLFW_KEY_SPACE)){
-            camera.updatePosition(camera.getUp() * speed * elapsed.count());
+        if (Key::isPressed(GLFW_KEY_SPACE)){
+            velocity += camera.getUp() * acceleration * elapsed.count();
         }
-        if (glfwGetKey(Window::window_ptr->window, GLFW_KEY_LEFT_SHIFT)){
-            camera.updatePosition(-camera.getUp() * speed * elapsed.count());
+        if (Key::isPressed(GLFW_KEY_LEFT_SHIFT)){
+            velocity -= camera.getUp() * acceleration * elapsed.count();
         }
-        if (glfwGetKey(Window::window_ptr->window, GLFW_KEY_Q)){
+        velocity *= friction;
+        if (Key::isPressed(GLFW_KEY_Q)){
             rotz = -sensitivity * elapsed.count() * 7;
         }
-        if (glfwGetKey(Window::window_ptr->window, GLFW_KEY_E)){
+        if (Key::isPressed(GLFW_KEY_E)){
             rotz = sensitivity * elapsed.count() * 7;
         }
         if (!releasemouse){

@@ -3,12 +3,12 @@
 namespace CppGame {
 
     
-intintToVoidFunc Mouse::onUndefinedButton = 0;
-voidFunc Mouse::onClick[3] = {0, 0, 0};
-voidFunc Mouse::onRelease[3] = {0, 0, 0};
-ullToVoidFunc Mouse::onDoubleClick[3] = {0, 0, 0};
-ullToVoidFunc Mouse::onHold[3] = {0, 0, 0};
-doubledoubleToVoidFunc Mouse::onScroll = 0;
+IntIntToVoidFunc Mouse::onUndefinedButton = 0;
+VoidFunc Mouse::onClick[3] = {0, 0, 0};
+VoidFunc Mouse::onRelease[3] = {0, 0, 0};
+ULLToVoidFunc Mouse::onDoubleClick[3] = {0, 0, 0};
+ULLToVoidFunc Mouse::onHold[3] = {0, 0, 0};
+DoubleDoubleToVoidFunc Mouse::onScroll = 0;
 
 bool Mouse::button_states[3] = {false, false, false};
 unsigned long long Mouse::ticks_timer[3] = {0, 0, 0};
@@ -72,20 +72,20 @@ void Mouse::setMaximalTicksBetweenDoubleClick(unsigned long long maximal_ticks_b
     Mouse::maximal_ticks_between_double_click = maximal_ticks_between_double_click;
 }
 
-void Mouse::setOnLeftClick(voidFunc onLeftClick){ Mouse::onClick[0] = onLeftClick; }
-void Mouse::setOnMiddleClick(voidFunc onMiddleClick){ Mouse::onClick[1] = onMiddleClick; }
-void Mouse::setOnRightClick(voidFunc onRightClick){ Mouse::onClick[2] = onRightClick; }
-void Mouse::setOnLeftRelease(voidFunc onLeftRelease){ Mouse::onRelease[0] = onLeftRelease; }
-void Mouse::setOnMiddleRelease(voidFunc onMiddleRelease){ Mouse::onRelease[1] = onMiddleRelease; }
-void Mouse::setOnRightRelease(voidFunc onRightRelease){ Mouse::onRelease[2] = onRightRelease; }
-void Mouse::setOnLeftDoubleClick(ullToVoidFunc onLeftDoubleClick){ Mouse::onDoubleClick[0] = onLeftDoubleClick; }
-void Mouse::setOnMiddleDoubleClick(ullToVoidFunc onMiddleDoubleClick){ Mouse::onDoubleClick[1] = onMiddleDoubleClick; }
-void Mouse::setOnRightDoubleClick(ullToVoidFunc onRightDoubleClick){ Mouse::onDoubleClick[2] = onRightDoubleClick; }
-void Mouse::setOnLeftHold(ullToVoidFunc onLeftHold){ Mouse::onHold[0] = onLeftHold; }
-void Mouse::setOnMiddleHold(ullToVoidFunc onMiddleHold){ Mouse::onHold[1] = onMiddleHold; }
-void Mouse::setOnRightHold(ullToVoidFunc onRightHold){ Mouse::onHold[2] = onRightHold; }
-void Mouse::setOnScroll(doubledoubleToVoidFunc onScroll){ Mouse::onScroll = onScroll; }
-void Mouse::setOnUndefinedButton(intintToVoidFunc OnUndefinedButton){ Mouse::onUndefinedButton = onUndefinedButton; }
+void Mouse::setOnLeftClick(VoidFunc onLeftClick){ Mouse::onClick[0] = onLeftClick; }
+void Mouse::setOnMiddleClick(VoidFunc onMiddleClick){ Mouse::onClick[1] = onMiddleClick; }
+void Mouse::setOnRightClick(VoidFunc onRightClick){ Mouse::onClick[2] = onRightClick; }
+void Mouse::setOnLeftRelease(VoidFunc onLeftRelease){ Mouse::onRelease[0] = onLeftRelease; }
+void Mouse::setOnMiddleRelease(VoidFunc onMiddleRelease){ Mouse::onRelease[1] = onMiddleRelease; }
+void Mouse::setOnRightRelease(VoidFunc onRightRelease){ Mouse::onRelease[2] = onRightRelease; }
+void Mouse::setOnLeftDoubleClick(ULLToVoidFunc onLeftDoubleClick){ Mouse::onDoubleClick[0] = onLeftDoubleClick; }
+void Mouse::setOnMiddleDoubleClick(ULLToVoidFunc onMiddleDoubleClick){ Mouse::onDoubleClick[1] = onMiddleDoubleClick; }
+void Mouse::setOnRightDoubleClick(ULLToVoidFunc onRightDoubleClick){ Mouse::onDoubleClick[2] = onRightDoubleClick; }
+void Mouse::setOnLeftHold(ULLToVoidFunc onLeftHold){ Mouse::onHold[0] = onLeftHold; }
+void Mouse::setOnMiddleHold(ULLToVoidFunc onMiddleHold){ Mouse::onHold[1] = onMiddleHold; }
+void Mouse::setOnRightHold(ULLToVoidFunc onRightHold){ Mouse::onHold[2] = onRightHold; }
+void Mouse::setOnScroll(DoubleDoubleToVoidFunc onScroll){ Mouse::onScroll = onScroll; }
+void Mouse::setOnUndefinedButton(IntIntToVoidFunc OnUndefinedButton){ Mouse::onUndefinedButton = onUndefinedButton; }
 
 void Mouse::hid(){
     glfwSetInputMode(Window::window_ptr->window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);

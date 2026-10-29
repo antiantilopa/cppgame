@@ -18,3 +18,4 @@
 #include "renderer.h"
 #include "opengl_renderer.h"
 #include "mouse.h"
+#include "key.h"

@@ -3,19 +3,19 @@
 
 namespace CppGame{
 
-typedef void(*voidFunc)();
-typedef void(*intintToVoidFunc)(int, int);
-typedef void(*doubledoubleToVoidFunc)(double, double);
-typedef void(*ullToVoidFunc)(unsigned long long);
+typedef void(*VoidFunc)();
+typedef void(*IntIntToVoidFunc)(int, int);
+typedef void(*DoubleDoubleToVoidFunc)(double, double);
+typedef void(*ULLToVoidFunc)(unsigned long long);
 
 class Mouse{
 protected:
-    static intintToVoidFunc onUndefinedButton; // arguments - button id, action
-    static voidFunc onClick[3];
-    static voidFunc onRelease[3];
-    static ullToVoidFunc onDoubleClick[3];    // argument - ticks between clicks
-    static ullToVoidFunc onHold[3];           // argument - ticks of holding
-    static doubledoubleToVoidFunc onScroll;   // arguments - horizontal and vertical scroll offset. horizontal works only from touchpad scroll
+    static IntIntToVoidFunc onUndefinedButton; // arguments - button id, action
+    static VoidFunc onClick[3];
+    static VoidFunc onRelease[3];
+    static ULLToVoidFunc onDoubleClick[3];    // argument - ticks between clicks
+    static ULLToVoidFunc onHold[3];           // argument - ticks of holding
+    static DoubleDoubleToVoidFunc onScroll;   // arguments - horizontal and vertical scroll offset. horizontal works only from touchpad scroll
     static bool button_states[3];
     static unsigned long long ticks_timer[3];
     static unsigned long long minimal_hold_ticks;
@@ -32,20 +32,20 @@ public:
     // sets maximal ticks needed to not press a button to call onDouble click
     static void setMaximalTicksBetweenDoubleClick(unsigned long long maximal_ticks_between_double_click); 
 
-    static void setOnLeftClick(voidFunc onLeftClick);
-    static void setOnMiddleClick(voidFunc onMiddleClick);
-    static void setOnRightClick(voidFunc onRightClick);
-    static void setOnLeftRelease(voidFunc onLeftRelease);
-    static void setOnMiddleRelease(voidFunc onMiddleRelease);
-    static void setOnRightRelease(voidFunc onRightRelease);
-    static void setOnLeftDoubleClick(ullToVoidFunc onLeftDoubleClick);
-    static void setOnMiddleDoubleClick(ullToVoidFunc onMiddleDoubleClick);
-    static void setOnRightDoubleClick(ullToVoidFunc onRightDoubleClick);
-    static void setOnLeftHold(ullToVoidFunc onLeftHold);
-    static void setOnMiddleHold(ullToVoidFunc onMiddleHold);
-    static void setOnRightHold(ullToVoidFunc onRightHold);
-    static void setOnScroll(doubledoubleToVoidFunc onScroll);
-    static void setOnUndefinedButton(intintToVoidFunc OnUndefinedButton);
+    static void setOnLeftClick(VoidFunc onLeftClick);
+    static void setOnMiddleClick(VoidFunc onMiddleClick);
+    static void setOnRightClick(VoidFunc onRightClick);
+    static void setOnLeftRelease(VoidFunc onLeftRelease);
+    static void setOnMiddleRelease(VoidFunc onMiddleRelease);
+    static void setOnRightRelease(VoidFunc onRightRelease);
+    static void setOnLeftDoubleClick(ULLToVoidFunc onLeftDoubleClick);
+    static void setOnMiddleDoubleClick(ULLToVoidFunc onMiddleDoubleClick);
+    static void setOnRightDoubleClick(ULLToVoidFunc onRightDoubleClick);
+    static void setOnLeftHold(ULLToVoidFunc onLeftHold);
+    static void setOnMiddleHold(ULLToVoidFunc onMiddleHold);
+    static void setOnRightHold(ULLToVoidFunc onRightHold);
+    static void setOnScroll(DoubleDoubleToVoidFunc onScroll);
+    static void setOnUndefinedButton(IntIntToVoidFunc OnUndefinedButton);
 
     static void hid(); // makes cursor hidden
     static void disable(); // makes cursor hidden and disables movement
