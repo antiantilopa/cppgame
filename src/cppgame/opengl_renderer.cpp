@@ -10,6 +10,7 @@ Window OpenGLRenderer::init(int width, int height, std::string title) {
     Draw2D::init(window);
 
     glfwSwapInterval(1);
+    return window;
 }
 
 void OpenGLRenderer::predraw() {
