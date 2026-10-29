@@ -35,7 +35,7 @@ void Mesh::draw(
 ){
 	if (camera == nullptr && Camera::main_camera_ptr == nullptr) {
 		std::cerr << "camera was not given, and main camera not initialized.\n";
-		throw "forgot the camera ahh error";
+		throw std::runtime_error("forgot the camera ahh error");
 	}
 	camera = camera == nullptr ? Camera::main_camera_ptr : camera;
 	// Bind shader to be able to access uniforms

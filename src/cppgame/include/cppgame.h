@@ -17,3 +17,4 @@
 #include "draw3d.h"
 #include "renderer.h"
 #include "opengl_renderer.h"
+#include "mouse.h"

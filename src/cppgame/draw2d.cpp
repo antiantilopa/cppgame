@@ -24,7 +24,8 @@ int const SQUARE_TYPE = 0;
 int const LINE_TYPE = 1; 
 int const TEXTURE_TYPE = 2; 
 
-void CppGame::Draw2D::init(Window& window){
+void CppGame::Draw2D::init(){
+    Window::checkWindow();
     // (!) Here ordering is VERY important, first we make VAO, then VBO (!)
 
     VAO& vao = *new VAO();
@@ -51,15 +52,14 @@ void CppGame::Draw2D::init(Window& window){
     );
     if (!shader_program.compiled_correctly){
         std::cout << "(!!!) ERROR: shader compilation failed!\n";
-        throw "something gone wrong ahh error";
+        throw std::runtime_error("something gone wrong ahh error");
     }
     shader_program.activate();
-    shader_program.setUniform("window_width", (float)window.width);
-    shader_program.setUniform("window_height", (float)window.height);
+    shader_program.setUniform("window_width", (float)Window::window_ptr->width);
+    shader_program.setUniform("window_height", (float)Window::window_ptr->height);
 
     
     CoreGeometry::shader2d_ptr = &shader_program;
-    CoreGeometry::window_ptr = &window;
     CoreGeometry::vao2d_ptr = &vao;
     CoreGeometry::vbo2d_ptr = &vbo;
     CoreGeometry::ebo_square_ptr = &ebo_square;
@@ -80,8 +80,8 @@ void CppGame::Draw2D::rect(int x, int y, int width, int height, char red, char g
     shader->activate();
     shader->setUniform("width", (float)width);
     shader->setUniform("height", (float)height);
-    shader->setUniform("x", (float)(x + (Mode::ox - 1) * (CoreGeometry::window_ptr->width) / 2) * Mode::x_sign - (Mode::ox - 1) * (width / 2));
-    shader->setUniform("y", (float)(y - (Mode::oy - 1) * (CoreGeometry::window_ptr->height) / 2) * Mode::y_sign + (Mode::oy - 1) * (height / 2));
+    shader->setUniform("x", (float)(x + (Mode::ox - 1) * (Window::window_ptr->width) / 2) * Mode::x_sign - (Mode::ox - 1) * (width / 2));
+    shader->setUniform("y", (float)(y - (Mode::oy - 1) * (Window::window_ptr->height) / 2) * Mode::y_sign + (Mode::oy - 1) * (height / 2));
     shader->setUniform("color", color, 3);
     // shader->setUniform("border_width", (float)border_width);
     shader->setUniform("shape_type", SQUARE_TYPE);
@@ -115,10 +115,10 @@ void CppGame::Draw2D::line(int x1, int y1, int x2, int y2, char red, char green,
     float color[3] = {(float)(unsigned char)red / 255.0f, (float)(unsigned char)green / 255.0f, (float)(unsigned char)blue / 255.0f};
     if (shader == nullptr) shader = CoreGeometry::shader2d_ptr;
     shader->activate();
-    shader->setUniform("x", (float)(x1 + (Mode::ox - 1) * (CoreGeometry::window_ptr->width) / 2) * Mode::x_sign);
-    shader->setUniform("y", (float)(y1 - (Mode::oy - 1) * (CoreGeometry::window_ptr->height) / 2) * Mode::y_sign);
-    shader->setUniform("x2", (float)(x2 + (Mode::ox - 1) * (CoreGeometry::window_ptr->width) / 2) * Mode::x_sign);
-    shader->setUniform("y2", (float)(y2 - (Mode::oy - 1) * (CoreGeometry::window_ptr->height) / 2) * Mode::y_sign);
+    shader->setUniform("x", (float)(x1 + (Mode::ox - 1) * (Window::window_ptr->width) / 2) * Mode::x_sign);
+    shader->setUniform("y", (float)(y1 - (Mode::oy - 1) * (Window::window_ptr->height) / 2) * Mode::y_sign);
+    shader->setUniform("x2", (float)(x2 + (Mode::ox - 1) * (Window::window_ptr->width) / 2) * Mode::x_sign);
+    shader->setUniform("y2", (float)(y2 - (Mode::oy - 1) * (Window::window_ptr->height) / 2) * Mode::y_sign);
     shader->setUniform("color", color, 3);
     shader->setUniform("shape_type", LINE_TYPE);
 
@@ -155,8 +155,8 @@ void CppGame::Draw2D::texture(int x, int y, Texture& texture, char red, char gre
     if (shader == nullptr) shader = CoreGeometry::shader2d_ptr;
 
     shader->activate();
-    shader->setUniform("x", (float)(x + (Mode::ox - 1) * (CoreGeometry::window_ptr->width) / 2) * Mode::x_sign - (Mode::ox - 1) * (texture.width * size / 2));
-    shader->setUniform("y", (float)(y - (Mode::oy - 1) * (CoreGeometry::window_ptr->height) / 2) * Mode::y_sign + (Mode::oy - 1) * (texture.height * size / 2));
+    shader->setUniform("x", (float)(x + (Mode::ox - 1) * (Window::window_ptr->width) / 2) * Mode::x_sign - (Mode::ox - 1) * (texture.width * size / 2));
+    shader->setUniform("y", (float)(y - (Mode::oy - 1) * (Window::window_ptr->height) / 2) * Mode::y_sign + (Mode::oy - 1) * (texture.height * size / 2));
     shader->setUniform("color", color, 3);
     shader->setUniform("width", (float)texture.width * size);
     shader->setUniform("height", (float)texture.height * size);

@@ -6,9 +6,9 @@
 
 namespace CppGame {
 
-class OpenGLRenderer : Renderer {
+class OpenGLRenderer : Renderer{
 public:
-    Window window;
+    Window& window;
     
     Window init(int width, int height, std::string title) override;
     void preupdate() override;

@@ -87,7 +87,7 @@ void Shader::init(const char* vertex_shader_file, const char* geometry_shader_fi
     glDeleteShader(fragment_shader);
     if (!compiled_correctly){
         std::cout << "(!!!) ERROR: shader compilation failed!\n";
-        throw "something gone wrong ahh error";
+        throw std::runtime_error("something gone wrong ahh error");
     }
 }
 Shader::Shader(const char* vertex_shader_file, const char* geometry_shader_file, const char* fragment_shader_file){

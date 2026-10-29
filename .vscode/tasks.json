@@ -9,7 +9,7 @@
                 "-static",
                 "-fdiagnostics-color=always",
                 "-g",
-                "$(dir", "${workspaceFolder}","-recurse","-file","-include","\"*.cpp\"", "|","select", "-expand","FullName",")",
+                "$(dir", "${workspaceFolder}\\src","-recurse","-file","-include","\"*.cpp\"", "|","select", "-expand","FullName",")",
                 "${workspaceFolder}\\src\\cppgame\\glad\\glad.c",
                 "-I",
                 "${workspaceFolder}\\src\\libraries\\include",

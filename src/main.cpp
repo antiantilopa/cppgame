@@ -29,16 +29,59 @@ using namespace CppGame;
 
 int WIDTH = 800;
 int HEIGHT = 600;
+int x, y;
+float rotx = 0, roty = 0, rotz = 0;
+float sensitivity = 7.0f;
+std::chrono::duration<float> elapsed;
+bool releasemouse = true;
 
 using namespace std;
+
+void onrightclick(){
+    std::cout << "iprem losum\n";
+}
+
+void onleftclick(){
+    rotx = 0.0f;
+    roty = 0.0f;
+    rotz = 0.0f;
+    Mouse::hid();
+    Mouse::setPosition(0, 0);
+}
+
+
+void onlefthold(unsigned long long t){
+    Mouse::getPosition(&x, &y);
+    Mouse::setPosition(0, 0);
+    rotx = -sensitivity * y * elapsed.count();
+    roty = -sensitivity * x * elapsed.count();
+}
+
+void onleftrelease(){
+    if (releasemouse){
+        Mouse::enable();
+    }
+}
+
+void onleftdouble(unsigned long long t){
+    if (releasemouse){
+        Mouse::hid();
+    }
+    releasemouse = !releasemouse;
+    std::cout << t  << " ";
+}
 
 int main(){
     CoreGeometry::init();
     Window window = Window(WIDTH, HEIGHT, "title");
-    
+    window.setAsMain();
 
-    CppGame::Draw3D::init(window);
-    CppGame::Draw2D::init(window);
+    Mouse::init();
+    Mouse::setMinimalHoldTicks(10);
+    Mouse::setMaximalTicksBetweenDoubleClick(20);
+
+    CppGame::Draw3D::init();
+    CppGame::Draw2D::init();
 
     Camera camera = Camera();
     camera.const_up = false;
@@ -54,11 +97,8 @@ int main(){
 
 
     bool first_click = true;
-    int x, y;
     int tick = 0;
     float speed = 2.0f;
-    float sensitivity = 7.0f;
-    float rotx = 0, roty = 0, rotz = 0;
     double fps;
     glfwSwapInterval(1);
     auto last_time = std::chrono::steady_clock::now();
@@ -66,63 +106,55 @@ int main(){
     Model scroll = Model("deleteme/scroll/scene.gltf");
     Model plane = Model("deleteme/plane/scene.gltf");
 
+    Mouse::setOnRightClick(onrightclick);
+    
+    Mouse::setOnLeftClick(onleftclick);
+    Mouse::setOnLeftRelease(onleftrelease);
+    Mouse::setOnLeftDoubleClick(onleftdouble);
+    Mouse::setOnLeftHold(onlefthold);
 
     while (!window.exitPressed()) {
+        Mouse::update();
         CoreGeometry::shader3d_ptr->activate();
         CoreGeometry::shader3d_ptr->setUniform("light_color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
         CoreGeometry::shader3d_ptr->setUniform("light_pos", camera.getPos());
         
         auto current_time = std::chrono::steady_clock::now();
-        std::chrono::duration<float> elapsed = current_time - last_time;
+        elapsed = current_time - last_time;
         last_time = current_time;
-        
-        if (glfwGetKey(CoreGeometry::window_ptr->window, GLFW_KEY_W)){
+        if (glfwGetKey(Window::window_ptr->window, GLFW_KEY_W)){
             camera.updatePosition(camera.getForward() * speed * elapsed.count());
         }
-        if (glfwGetKey(CoreGeometry::window_ptr->window, GLFW_KEY_S)){
+        if (glfwGetKey(Window::window_ptr->window, GLFW_KEY_S)){
             camera.updatePosition(-camera.getForward() * speed * elapsed.count());
         }
-        if (glfwGetKey(CoreGeometry::window_ptr->window, GLFW_KEY_D)){
+        if (glfwGetKey(Window::window_ptr->window, GLFW_KEY_D)){
             camera.updatePosition(camera.getRight() * speed * elapsed.count());
         }
-        if (glfwGetKey(CoreGeometry::window_ptr->window, GLFW_KEY_A)){
+        if (glfwGetKey(Window::window_ptr->window, GLFW_KEY_A)){
             camera.updatePosition(-camera.getRight() * speed * elapsed.count());
         }
-        if (glfwGetKey(CoreGeometry::window_ptr->window, GLFW_KEY_SPACE)){
+        if (glfwGetKey(Window::window_ptr->window, GLFW_KEY_SPACE)){
             camera.updatePosition(camera.getUp() * speed * elapsed.count());
         }
-        if (glfwGetKey(CoreGeometry::window_ptr->window, GLFW_KEY_LEFT_SHIFT)){
+        if (glfwGetKey(Window::window_ptr->window, GLFW_KEY_LEFT_SHIFT)){
             camera.updatePosition(-camera.getUp() * speed * elapsed.count());
         }
-        if (glfwGetKey(CoreGeometry::window_ptr->window, GLFW_KEY_Q)){
+        if (glfwGetKey(Window::window_ptr->window, GLFW_KEY_Q)){
             rotz = -sensitivity * elapsed.count() * 7;
         }
-        if (glfwGetKey(CoreGeometry::window_ptr->window, GLFW_KEY_E)){
+        if (glfwGetKey(Window::window_ptr->window, GLFW_KEY_E)){
             rotz = sensitivity * elapsed.count() * 7;
         }
-        if (glfwGetMouseButton(window.window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
-            if (first_click){
-                glfwSetInputMode(window.window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-                CoreGeometry::Mouse::setPosition(0, 0);
-                first_click = false;
-            }
-            else{
-                CoreGeometry::Mouse::getPosition(&x, &y);
-                CoreGeometry::Mouse::setPosition(0, 0);
-                rotx = -sensitivity * y * elapsed.count();
-                roty = -sensitivity * x * elapsed.count();
-            }
-        }
-        else{
-            first_click = true;
-            glfwSetInputMode(window.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        if (!releasemouse){
+            Mouse::getPosition(&x, &y);
+            Mouse::setPosition(0, 0);
+            rotx = -sensitivity * y * elapsed.count();
+            roty = -sensitivity * x * elapsed.count();
         }
 
         camera.updateOrientation(rotx, roty, rotz);
-        rotx = 0.0f;
-        roty = 0.0f;
         rotz = 0.0f;
-        
         // clear all events 
         glfwPollEvents();
         

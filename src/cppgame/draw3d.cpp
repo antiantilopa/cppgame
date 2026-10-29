@@ -43,7 +43,8 @@ std::vector<unsigned int> indices_line3d = {
     0, 7
 };
 
-void CppGame::Draw3D::init(Window& window){
+void CppGame::Draw3D::init(){
+    Window::checkWindow();
     CppGame::Draw3D::cube_mesh = new Mesh(vertices_cube, Vertex3d::POS_NORMAL_COLOR, indices_cube);
     CppGame::Draw3D::piramid_mesh = new Mesh(vertices_piramid, Vertex3d::POS_NORMAL_COLOR, indices_piramid);
     CppGame::Draw3D::nothing_mesh = new Mesh();
@@ -60,17 +61,16 @@ void CppGame::Draw3D::init(Window& window){
         CoreGeometry::PATH / "shaders/billboard3d.geom", 
         CoreGeometry::PATH / "shaders/billboard3d.frag");
     shader_program.activate();
-    shader_program.setUniform("window_width", (float)window.width);
-    shader_program.setUniform("window_height", (float)window.height);
+    shader_program.setUniform("window_width", (float)Window::window_ptr->width);
+    shader_program.setUniform("window_height", (float)Window::window_ptr->height);
     light_shader_program.activate();
-    light_shader_program.setUniform("window_width", (float)window.width);
-    light_shader_program.setUniform("window_height", (float)window.height);
+    light_shader_program.setUniform("window_width", (float)Window::window_ptr->width);
+    light_shader_program.setUniform("window_height", (float)Window::window_ptr->height);
     billboard_shader_program.activate();
 
     CoreGeometry::shader3d_ptr = &shader_program;
     CoreGeometry::light_shader3d_ptr = &light_shader_program;
     CoreGeometry::billboard_shader3d_ptr = &billboard_shader_program;
-    CoreGeometry::window_ptr = &window;
 }
 
 void CppGame::Draw3D::cube(int x, int y, int z, int width, int height, int depth, char red, char green, char blue, int border_width){

@@ -3,8 +3,7 @@
 #include "VBO.h"
 #include <glad/glad.h>
 
-class VAO
-{
+class VAO{
 public:
 	unsigned int ID;
 

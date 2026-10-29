@@ -2,11 +2,9 @@
 
 #include <vector>
 
-class EBO
-{
+class EBO{
 public:
 	unsigned int ID;
-    
 	EBO(std::vector<unsigned int> indices);
 	void bind();
 	void unbind();

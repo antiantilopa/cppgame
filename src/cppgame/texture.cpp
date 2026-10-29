@@ -34,7 +34,7 @@ Texture::Texture(const char* image_path, const char* type, unsigned int unit, un
     if(!data){
         std::cout << "Failed to load texture: " << image_path << std::endl;
         std::cout << stbi_failure_reason() << std::endl;
-        throw "Failed to load texture ahh error";
+        throw std::runtime_error("Failed to load texture ahh error");
     }
     this->type = type;
     glGenTextures(1, &ID);

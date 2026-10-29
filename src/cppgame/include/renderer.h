@@ -6,7 +6,7 @@
 
 namespace CppGame {
 
-class Renderer {
+class Renderer{
 public:
     virtual Window init(int width, int height, std::string title);
     virtual void preupdate()=0; // TODO find a way to not do "=0", but make it compile with g++

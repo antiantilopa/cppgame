@@ -22,8 +22,8 @@ public:
     glm::vec3 trans = glm::vec3(0.0f, 0.0f, 0.0f), 
     glm::quat rot = glm::quat(1.0f, 0.0f, 0.0f, 0.0f), 
     glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f));
+    
 private:
-
     std::vector<Mesh> meshes;
     std::vector<glm::vec3> translations;
     std::vector<glm::quat> rotations;

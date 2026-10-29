@@ -18,7 +18,7 @@ Camera::Camera(){
     this->fov = half_pi / 2; // 45 degrees
     this->min_pitch = glm::radians(5.0f);
     this->const_up = true;
-    this->proj = glm::perspective(fov, CoreGeometry::window_ptr->aspect, near_plane, far_plane);
+    this->proj = glm::perspective(fov, Window::window_ptr->aspect, near_plane, far_plane);
     this->updated = true;
     Camera::main_camera_ptr = this;
 }
@@ -31,7 +31,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 forward, glm::vec3 up, float near_p
     this->far_plane = far_plane;
     this->fov = fov;
     this->const_up = const_up;
-    this->proj = glm::perspective(fov, CoreGeometry::window_ptr->aspect, near_plane, far_plane);
+    this->proj = glm::perspective(fov, Window::window_ptr->aspect, near_plane, far_plane);
     this->updated = true;
     Camera::main_camera_ptr = this;
 }
@@ -59,14 +59,14 @@ void Camera::setForward(glm::vec3 new_forward, glm::vec3 new_up){
     if (new_up == glm::vec3(0.0f)){
         if (glm::dot(up, forward) != 0.0f){
             std::cerr << "ERROR: old up is not perpendicular to new forward\nERROR: WHICH IS RIDICULUS!!!";
-            throw "(maybe) floating point ahh error";
+            throw std::invalid_argument("(maybe) floating point ahh error");
         }
         updated = true;
         return;
     }
     if (glm::dot(new_up, forward) != 0.0f){
         std::cerr << "ERROR: new up is not perpendicular to forward";
-        throw "(maybe) floating point ahh error";
+        throw std::invalid_argument("(maybe) floating point ahh error");
     }
     up = glm::normalize(new_up);
     updated = true;
@@ -106,17 +106,17 @@ void Camera::updatePosition(glm::vec3 offset){
 
 void Camera::setNearPlane(float value){
     near_plane = value;
-    this->proj = glm::perspective(fov, CoreGeometry::window_ptr->aspect, near_plane, far_plane);
+    this->proj = glm::perspective(fov, Window::window_ptr->aspect, near_plane, far_plane);
     updated = true;
 }
 void Camera::setFarPlane(float value){
     far_plane = value;
-    this->proj = glm::perspective(fov, CoreGeometry::window_ptr->aspect, near_plane, far_plane);
+    this->proj = glm::perspective(fov, Window::window_ptr->aspect, near_plane, far_plane);
     updated = true;
 }
 void Camera::setFov(float value){
     fov = value;
-    this->proj = glm::perspective(fov, CoreGeometry::window_ptr->aspect, near_plane, far_plane);
+    this->proj = glm::perspective(fov, Window::window_ptr->aspect, near_plane, far_plane);
     updated = true;
 }
 

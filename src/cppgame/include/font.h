@@ -18,7 +18,7 @@ struct FontData{
     unsigned char char_offset_y[256];
 }; 
 
-class Font {
+class Font{
 public:
     std::unordered_map<std::string, Texture*> cache;
     Texture* font_texture;

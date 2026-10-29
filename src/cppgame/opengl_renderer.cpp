@@ -6,8 +6,8 @@ Window OpenGLRenderer::init(int width, int height, std::string title) {
     CoreGeometry::init();
     window = Window(width, height, title.c_str());
 
-    Draw3D::init(window);
-    Draw2D::init(window);
+    Draw3D::init();
+    Draw2D::init();
 
     glfwSwapInterval(1);
     return window;

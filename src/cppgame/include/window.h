@@ -9,7 +9,11 @@ public:
     float aspect;
     GLFWwindow* window;
 
+    static Window* window_ptr;
+
     Window(int width, int height, const char* title, bool fullscreen = false);
+    void setAsMain();
+    static void checkWindow();
     ~Window();
 
     bool exitPressed();

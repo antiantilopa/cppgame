@@ -3,7 +3,12 @@
 #include "include/window.h"
 #include "include/mode.h"
 
+Window* Window::window_ptr = nullptr;
+
 Window::Window(int width, int height, const char* title, bool fullscreen){
+    if (Window::window_ptr != nullptr){
+        throw std::runtime_error("tried to create second window");
+    }
     // create window with GLFW
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     if (fullscreen){
@@ -15,7 +20,7 @@ Window::Window(int width, int height, const char* title, bool fullscreen){
     
     if (window == NULL){
         std::cout << "Error occured during window creation.\n";
-        throw "something gone wrong ahh error";
+        throw std::runtime_error("something gone wrong ahh error");
     }
     // Adds window into context, and makes it current
     // (whatever it means)
@@ -26,13 +31,26 @@ Window::Window(int width, int height, const char* title, bool fullscreen){
     int initialized_correctly = gladLoadGL();
     if (initialized_correctly == GL_FALSE){
         std::cout << "(!!!) ERROR: gladLoadGL() failed!\n";
-        throw "something gone wrong ahh error";
+        throw std::runtime_error("something gone wrong ahh error");
     }
     // Tell OpenGL what part of screen to use
     glViewport(0, 0, width, height);
     this->width = width;
     this->height = height;
     this->aspect = (float) width / (float) height;
+}
+
+void Window::checkWindow(){
+    if (Window::window_ptr == nullptr){
+        std::cout << "(!!!) no main window found\n";
+        std::cout << "      create a window or set created window as main\n";
+        throw std::runtime_error("forgot the window ahh error");
+    }
+}
+
+
+void Window::setAsMain(){
+    Window::window_ptr = this;
 }
 
 Window::~Window(){

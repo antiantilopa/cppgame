@@ -278,7 +278,7 @@ Texture& Font::render(std::string text, Shader& shader){
     Texture* new_texture = new Texture(width, height);
     render(text, *new_texture, 0, 0, shader, 1);
     cache[text] = new_texture;
-    glViewport(0, 0, CoreGeometry::window_ptr->width, CoreGeometry::window_ptr->height);
+    glViewport(0, 0, Window::window_ptr->width, Window::window_ptr->height);
     return *new_texture;
 }
 

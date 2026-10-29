@@ -7,13 +7,12 @@
 
 namespace CppGame {
 
-class CoreGeometry {
+class CoreGeometry{
 public:
     static Shader* shader2d_ptr;
     static Shader* shader3d_ptr;
     static Shader* light_shader3d_ptr;
     static Shader* billboard_shader3d_ptr;
-    static Window* window_ptr;
     static VAO* vao2d_ptr;
     static VAO* vao3d_ptr;
     static VBO* vbo2d_ptr;
@@ -25,21 +24,6 @@ public:
 
     static std::filesystem::path PATH;
     static void init();
-
-    class Mouse{
-    public:
-        template<typename T>
-        static void getPosition(T* x, T* y);
-        template<typename T>
-        static T* getPosition(); // creates new obhect on heap! needs deleting
-        template<typename T>
-        static void getPosition(T* position); // position has to be array of at least size 2.
-
-        template<typename T>
-        static void setPosition(T x, T y);
-        template<typename T>
-        static void setPosition(T* position); // position has to be array of at least size 2.
-    };
 };
 
 }

@@ -6,7 +6,7 @@
 
 namespace CppGame {
 
-class Engine {
+class Engine{
 public:
     Window& window;
     Camera& camera;

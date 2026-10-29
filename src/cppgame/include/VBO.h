@@ -4,8 +4,7 @@
 #include <vector>
 #include "vertex.h"
 
-class VBO
-{
+class VBO{
 public:
 	unsigned int ID; // id of VBO object in GPU
 	VBO(std::vector<Vertex3d> verticies, unsigned char mode = Vertex3d::POS, unsigned int reserve = 0);

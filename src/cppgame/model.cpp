@@ -73,7 +73,7 @@ std::vector<float> Model::getFloats(json accessor){
     else if (type == "VEC2") num = 2;
     else if (type == "VEC3") num = 3;
     else if (type == "VEC4") num = 4;
-    else throw "invalid type of accessor: '" + type + "'";
+    else throw std::runtime_error("invalid type of accessor: '" + type + "'");
 
     json buffer_view = JSON["bufferViews"][buffer_view_ind];
     // where buffer view starts
@@ -106,7 +106,7 @@ std::vector<unsigned int> Model::getIndices(json accessor){
     if (type == 5125) num = 4;
     else if (type == 5123) num = 2;
     else if (type == 5122) num = 2;
-    else throw "invalid type of accessor";
+    else throw std::runtime_error("invalid type of accessor: " + std::to_string(type));
 
     json buffer_view = JSON["bufferViews"][buffer_view_ind];
     // where buffer view starts
@@ -141,7 +141,9 @@ std::vector<unsigned int> Model::getIndices(json accessor){
         return indices;
     }
     else{
-        throw "umm, wtf ahh error.  Really, what the actual fuck?";
+        std::cout << "(!?) the unknown type: " << type << " encoutered\n";
+        std::cout << "     but it was not catched before which is strange";
+        throw std::runtime_error("umm, wtf ahh error. Really, what the actual fuck?");
     }
 }
 
