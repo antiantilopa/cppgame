@@ -8,8 +8,8 @@ public:
     unsigned int ID;
     Texture* output_texture;
     FBO();
-    void bind();
-    void unbind();
+    void bind(); // do not use unknowingly !
+    void unbind(); // do not use unknowingly !
     void bindTexture(Texture& output);
     // void bindRBO(); // not implemeted yet
     void setup(); //setup FBO before drawing on it

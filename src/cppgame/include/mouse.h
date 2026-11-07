@@ -45,7 +45,7 @@ public:
     static void setOnMiddleHold(ULLToVoidFunc onMiddleHold);
     static void setOnRightHold(ULLToVoidFunc onRightHold);
     static void setOnScroll(DoubleDoubleToVoidFunc onScroll);
-    static void setOnUndefinedButton(IntIntToVoidFunc OnUndefinedButton);
+    static void setOnUndefinedButton(IntIntToVoidFunc onUndefinedButton);
 
     static void hid(); // makes cursor hidden
     static void disable(); // makes cursor hidden and disables movement

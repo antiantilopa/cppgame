@@ -31,7 +31,7 @@ int WIDTH = 800;
 int HEIGHT = 600;
 int x, y;
 float rotx = 0, roty = 0, rotz = 0;
-float sensitivity = 7.0f;
+float sensitivity = 2.0f;
 std::chrono::duration<float> elapsed;
 bool releasemouse = true;
 
@@ -44,9 +44,6 @@ void onrightclick(){
 }
 
 void onleftclick(){
-    rotx = 0.0f;
-    roty = 0.0f;
-    rotz = 0.0f;
     Mouse::hid();
     Mouse::setPosition(0, 0);
 }
@@ -55,8 +52,8 @@ void onleftclick(){
 void onlefthold(unsigned long long t){
     Mouse::getPosition(&x, &y);
     Mouse::setPosition(0, 0);
-    rotx = -sensitivity * y * elapsed.count();
-    roty = -sensitivity * x * elapsed.count();
+    rotx += -sensitivity * y * elapsed.count();
+    roty += -sensitivity * x * elapsed.count();
 }
 
 void onleftrelease(){
@@ -73,6 +70,16 @@ void onleftdouble(unsigned long long t){
     std::cout << t  << " ";
 }
 
+std::string written_text = std::string();
+
+void ontextinput(unsigned int key){
+    if (key > 0xFF){
+        return;
+    }
+    written_text.push_back(key);
+}
+
+
 int main(){
     CoreGeometry::init();
     Window window = Window(WIDTH, HEIGHT, "title");
@@ -81,6 +88,12 @@ int main(){
     Mouse::init();
     Mouse::setMinimalHoldTicks(10);
     Mouse::setMaximalTicksBetweenDoubleClick(20);
+
+    Key::init();
+
+    TextInput::init();
+
+    Font::init();
 
     CppGame::Draw3D::init();
     CppGame::Draw2D::init();
@@ -96,7 +109,18 @@ int main(){
     Texture image("deleteme/image.png");
     Texture texture("deleteme/texture.png");
     Texture background("deleteme/background.png");
+    Texture text_input_texture = Texture(WIDTH, HEIGHT);
+    Font font("deleteme/font.bin");
 
+    Shader text_render_shader = Shader(
+        CoreGeometry::PATH / "shaders/text_render2d.vert", 
+        std::filesystem::path(),
+        CoreGeometry::PATH / "shaders/text_render2d.frag"
+    );
+    text_render_shader.setUniform("window_width", (float) WIDTH);
+    text_render_shader.setUniform("window_height", (float) HEIGHT);
+    std::string text = "Test";
+    Texture& text_tex = font.render(text, text_render_shader);
 
     bool first_click = true;
     int tick = 0;
@@ -116,6 +140,8 @@ int main(){
     Mouse::setOnLeftRelease(onleftrelease);
     Mouse::setOnLeftDoubleClick(onleftdouble);
     Mouse::setOnLeftHold(onlefthold);
+
+    TextInput::setOnCharCallback(ontextinput);
 
     while (!window.exitPressed()) {
         Mouse::update();
@@ -147,20 +173,22 @@ int main(){
         }
         velocity *= friction;
         if (Key::isPressed(GLFW_KEY_Q)){
-            rotz = -sensitivity * elapsed.count() * 7;
+            rotz = -sensitivity * elapsed.count() * 21.5f;
         }
         if (Key::isPressed(GLFW_KEY_E)){
-            rotz = sensitivity * elapsed.count() * 7;
+            rotz = sensitivity * elapsed.count() * 21.5f;
         }
         if (!releasemouse){
             Mouse::getPosition(&x, &y);
             Mouse::setPosition(0, 0);
-            rotx = -sensitivity * y * elapsed.count();
-            roty = -sensitivity * x * elapsed.count();
+            rotx += -sensitivity * y * elapsed.count();
+            roty += -sensitivity * x * elapsed.count();
         }
 
         camera.updateOrientation(rotx, roty, rotz);
-        rotz = 0.0f;
+        rotx *= friction;
+        roty *= friction;
+        rotz *= friction;
         // clear all events 
         glfwPollEvents();
         
@@ -168,7 +196,12 @@ int main(){
         window.fill(64, 0, 64, 255);
 
         CppGame::Draw2D::texture(0, 0, background, tick / 16, tick / 16, camera.getPos().x);
+
+        font.render(written_text, text_input_texture, 0, 0, text_render_shader, 1);
+        CppGame::Draw2D::texture(0, 0, text_input_texture, tick / 16, tick / 16, camera.getPos().x);
+
         tick++;
+        text_tex.bind();
         CppGame::Draw3D::piramid(4, 4, 0, 1, 1, 1, 200, 10, 20);
         CppGame::Draw3D::cube(4, 2, 0, 1, 1, 1, 200, 10, 100);
         CppGame::Draw3D::cube(4, 0, 0, 1, 1, 1, 10, 10, 200);

@@ -11,5 +11,5 @@ void main(){
     if (FragColor.a < 0.5f){
         discard; 
     }
-    FragColor *= vec4(tex_coord / vec2(16.0f), 1.0f, 1.0f);
+    FragColor *= vec4(1.0f, 1.0f, 1.0f, 1.0f);
 } 

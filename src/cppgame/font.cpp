@@ -76,7 +76,7 @@ void Font::render(std::string text, Texture& output, int x, int y, Shader& shade
     fbo->bindTexture(output);
     fbo->setup();
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
-        std::cout << "FBO is not complete:" << glCheckFramebufferStatus(fbo->ID);
+        std::cout << "FBO is not complete: " << glCheckFramebufferStatus(fbo->ID);
     }
     shader.activate();
     shader.setUniform("window_width", (float)output.width);
@@ -84,11 +84,11 @@ void Font::render(std::string text, Texture& output, int x, int y, Shader& shade
     __raw_draw(text, x, y, shader);
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
-        std::cout << "FBO is not complete:" << glCheckFramebufferStatus(fbo->ID);
+        std::cout << "FBO is not complete: " << glCheckFramebufferStatus(fbo->ID);
     }
     fbo->unbind();
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
-        std::cout << "FBO is not complete:" << glCheckFramebufferStatus(fbo->ID);
+        std::cout << "FBO is not complete: " << glCheckFramebufferStatus(fbo->ID);
     }
 }
 
@@ -282,4 +282,40 @@ Texture& Font::render(std::string text, Shader& shader){
     return *new_texture;
 }
 
+void Font::deleteTexture(Texture& texture){
+    for (auto [text, tex] : cache){
+        if (tex == &texture){
+            cache.erase(text);
+            delete tex;
+            return;
+        }
+    }
+    std::cout << "tried to delete texture that was not cached\n";
+    throw std::invalid_argument("texture not found in cache ahh error");
+}
 
+void Font::deleteTexture(std::string text){
+    if (cache.count(text) == 0){
+        std::cout << "tried to delete texture with given text, but text not found\n";
+        std::cout << "text = " << text << "\n";
+        throw std::invalid_argument("text not found in cache ahh error");
+    }
+    Texture* tex = cache[text];
+    cache.erase(text);
+    delete tex;
+}
+
+void Font::deleteTexture(Texture& texture, std::string text){
+    if (cache.count(text) == 0){
+        std::cout << "tried to delete texture with given text, but text not found\n";
+        std::cout << "text = " << text << "\n";
+        throw std::invalid_argument("text not found in cache ahh error");
+    }
+    if (cache[text] != &texture){
+        std::cout << "tried to delete texture with given text, but another texture found with this text\n";
+        std::cout << "text = " << text << "\n";
+        throw std::invalid_argument("another texture with given text found ahh error");
+    }
+    cache.erase(text);
+    delete &texture;
+}
