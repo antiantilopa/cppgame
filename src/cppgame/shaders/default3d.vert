@@ -25,7 +25,8 @@ void main(){
     gl_Position = cam_matrix * vec4(vs_out.current_pos, 1.0);
     vs_out.out_color = aColor;
     vs_out.relpos = aPos;
-    vs_out.normal = aNormal;
+    vs_out.normal = vec3(model * (-rotation) * vec4(aNormal, 1.0f)); 
+    // TODO notice the 'model' part above. it is bad. it should be replaced with rotation part of 'model' matrix!!!  
     vs_out.tex_coord = aTexture;
     return;
 }

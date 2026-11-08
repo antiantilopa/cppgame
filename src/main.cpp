@@ -201,11 +201,17 @@ int main(){
         CppGame::Draw2D::texture(0, 0, text_input_texture, tick / 16, tick / 16, camera.getPos().x);
 
         tick++;
-        text_tex.bind();
+        text_tex.bind(); // VERY BAD THING!!! DO NOT BIND RANDOM TEXTURES IN RANDOM PLACES!!!
         CppGame::Draw3D::piramid(4, 4, 0, 1, 1, 1, 200, 10, 20);
         CppGame::Draw3D::cube(4, 2, 0, 1, 1, 1, 200, 10, 100);
         CppGame::Draw3D::cube(4, 0, 0, 1, 1, 1, 10, 10, 200);
         CppGame::Draw3D::cube(4, -2, 0, 100, 1, 100, 200, 200, 200);
+        background.bind();
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++){
+                CppGame::Draw3D::cube(i * 2 + 5, 0, j * 2, 1, 1, 1, 200 * ((i + j) % 2), 200 * ((i + j) % 2), 200 * ((i + j) % 2));
+            }
+        }
         CppGame::Draw3D::billboard(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 2.0f), image);
         plane.draw(*CoreGeometry::shader3d_ptr, camera, glm::vec3(0.0f, 2.0f, 0.0f), glm::quat(1.0f, 0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f));
         scroll.draw(*CoreGeometry::shader3d_ptr, camera, glm::vec3(0.0f, 2.0f, 4.0f), glm::quat(1.0f, 0.0f, 0.0f, 0.0f), glm::vec3(-0.01f, -0.01f, -0.01f));
