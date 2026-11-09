@@ -81,9 +81,17 @@ void ontextinput(unsigned int key){
 
 
 int main(){
-    CoreGeometry::init();
-    Window window = Window(WIDTH, HEIGHT, "title");
-    window.setAsMain();
+    // CoreGeometry::init();
+    // Window window = Window(WIDTH, HEIGHT, "title");
+    CppGame::OpenGLRenderer renderer = CppGame::OpenGLRenderer(WIDTH, HEIGHT, "title");
+    // window.setAsMain();
+
+    // pizdec: TODO HACK BUG:
+    unsigned int RBO;
+    glGenRenderbuffers(1, &RBO);
+    glBindRenderbuffer(GL_RENDERBUFFER, RBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, WIDTH, HEIGHT);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 
     Mouse::init();
     Mouse::setMinimalHoldTicks(10);
@@ -143,7 +151,7 @@ int main(){
 
     TextInput::setOnCharCallback(ontextinput);
 
-    while (!window.exitPressed()) {
+    while (!Window::window_ptr->exitPressed()) {
         Mouse::update();
         CoreGeometry::shader3d_ptr->activate();
         CoreGeometry::shader3d_ptr->setUniform("light_color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -192,13 +200,14 @@ int main(){
         // clear all events 
         glfwPollEvents();
         
-        // sets background color for clear or swap
-        window.fill(64, 0, 64, 255);
-
-        CppGame::Draw2D::texture(0, 0, background, tick / 16, tick / 16, camera.getPos().x);
-
         font.render(written_text, text_input_texture, 0, 0, text_render_shader, 1);
         CppGame::Draw2D::texture(0, 0, text_input_texture, tick / 16, tick / 16, camera.getPos().x);
+        // sets background color for clear or swap
+        renderer.predraw();
+        Window::window_ptr->fill(255, 0, 0, 0); // fills the screen...
+        
+        CppGame::Draw2D::texture(0, 0, background, tick / 16, tick / 16, camera.getPos().x);
+        
 
         tick++;
         text_tex.bind(); // VERY BAD THING!!! DO NOT BIND RANDOM TEXTURES IN RANDOM PLACES!!!
@@ -221,7 +230,7 @@ int main(){
         }
 
         // swaps two image buffers.
-        window.flip();
+        renderer.postdraw();
         if (glGetError() == GL_INVALID_OPERATION){
             std::cout << "FVCK\n";
         }

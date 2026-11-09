@@ -149,8 +149,8 @@ void CppGame::Draw2D::texture(int x, int y, Texture& texture, char red, char gre
     glDisable(GL_DEPTH_TEST);
     float color[3] = {(float)(unsigned char)red / 255.0f, (float)(unsigned char)green / 255.0f, (float)(unsigned char)blue / 255.0f};
     if (texture.channel_num == 4){
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        // glEnable(GL_BLEND);
+        // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }    
     if (shader == nullptr) shader = CoreGeometry::shader2d_ptr;
 
@@ -178,6 +178,7 @@ void CppGame::Draw2D::texture(int x, int y, Texture& texture, char red, char gre
 void CppGame::Draw2D::texture(int x, int y, Texture& texture, char color[3], int size, Shader* shader){
     if (color == nullptr){
         Draw2D::texture(x, y, texture, 255, 255, 255, size, shader);
+        return;
     }
     Draw2D::texture(x, y, texture, color[0], color[1], color[2], size, shader);
 }

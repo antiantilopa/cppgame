@@ -21,6 +21,7 @@ public:
     static EBO* ebo_line2d_ptr;
     static EBO* ebo_cube_ptr;
     static EBO* ebo_line3d_ptr;
+    static FBO* fbo_ptr;
 
     static std::filesystem::path PATH;
     static void init();

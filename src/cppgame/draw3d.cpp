@@ -61,11 +61,7 @@ void CppGame::Draw3D::init(){
         CoreGeometry::PATH / "shaders/billboard3d.geom", 
         CoreGeometry::PATH / "shaders/billboard3d.frag");
     shader_program.activate();
-    shader_program.setUniform("window_width", (float)Window::window_ptr->width);
-    shader_program.setUniform("window_height", (float)Window::window_ptr->height);
     light_shader_program.activate();
-    light_shader_program.setUniform("window_width", (float)Window::window_ptr->width);
-    light_shader_program.setUniform("window_height", (float)Window::window_ptr->height);
     billboard_shader_program.activate();
 
     CoreGeometry::shader3d_ptr = &shader_program;
