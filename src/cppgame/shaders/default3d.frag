@@ -40,7 +40,7 @@ float point_light(){
     float diffuse = max(abs(dot(norm, light_dir)), 0.0f);
     // diffuse = 0;
     // specular light (brightness defined by reflection)
-    float specular_amount = pow(max(abs(dot(norm, half_way)), 0.0f), specular_exp);
+    float specular_amount = pow(max((dot(norm, half_way)), 0.0f), specular_exp);
     float specular = specular_const * specular_amount;
     float specular_tex_amount = length(texture2D(specular0, tex_coord));
     // return 1-specular;
@@ -59,6 +59,6 @@ void main()
     }
     // tex.xyz = vec3(tex.x + tex.y + tex.z) / 3;
     FragColor = light_color * point_light() * tex * vec4(color, 1.0f);
-    // FragColor = vec4((normal), 1);
+    // FragColor = vec4((normalize(normal*normal)), 1);
     return;
 }

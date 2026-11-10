@@ -4,7 +4,8 @@ namespace CppGame {
 
 OpenGLRenderer::OpenGLRenderer(int width, int height, std::string title) // class being virtual fuckery
     : window(OpenGLRenderer::init(width, height, title)),
-      screen(OpenGLRenderer::init_screen()) {}
+      screen(OpenGLRenderer::init_screen()),
+      post_process(nullptr) {}
 
 
 Window& OpenGLRenderer::init(int width, int height, std::string title) {
@@ -26,6 +27,11 @@ Texture& OpenGLRenderer::init_screen(){
     return screen;
 }
 
+void OpenGLRenderer::setPostProcessingShader(Shader* post_process){
+    this->post_process = post_process;
+}
+
+
 void OpenGLRenderer::preupdate() {
 
 }
@@ -46,7 +52,7 @@ void OpenGLRenderer::postdraw() {
     }
 
     CoreGeometry::fbo_ptr->unbind();
-    Draw2D::texture(0, 0, screen, nullptr, 1, nullptr);
+    Draw2D::texture(0, 0, screen, nullptr, 1, this->post_process);
 
 
 

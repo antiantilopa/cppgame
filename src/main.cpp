@@ -130,6 +130,13 @@ int main(){
     std::string text = "Test";
     Texture& text_tex = font.render(text, text_render_shader);
 
+    Shader post_processing_shader = Shader(
+        CoreGeometry::PATH / "shaders/post_process.vert", 
+        std::filesystem::path(),
+        CoreGeometry::PATH / "shaders/post_process.frag"
+    );
+    renderer.setPostProcessingShader(&post_processing_shader);
+
     bool first_click = true;
     int tick = 0;
     float speed = 5.0f;

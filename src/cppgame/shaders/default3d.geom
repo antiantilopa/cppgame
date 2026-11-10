@@ -19,10 +19,11 @@ out vec3 current_pos;
 out vec2 tex_coord;
 
 void main(){
+    normal = cross(gs_in[0].current_pos - gs_in[1].current_pos, gs_in[0].current_pos - gs_in[2].current_pos);
     for (int i = 0; i < 3; i++){
         out_color = gs_in[i].out_color;
         relpos = gs_in[i].relpos;
-        normal = gs_in[i].normal;
+        normal = normal;
         current_pos = gs_in[i].current_pos;
         tex_coord = gs_in[i].tex_coord;
         gl_Position = gl_in[i].gl_Position; 
