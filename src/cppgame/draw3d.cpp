@@ -51,7 +51,7 @@ void CppGame::Draw3D::init(){
     Shader& shader_program = *new Shader(
         CoreGeometry::PATH / "shaders/default3d.vert", 
         CoreGeometry::PATH / "shaders/default3d.geom", 
-        CoreGeometry::PATH / "shaders/default3d.frag");
+        CoreGeometry::PATH / "shaders/pbr3d.frag");
     Shader& light_shader_program = *new Shader(
         CoreGeometry::PATH / "shaders/default3d.vert", 
         CoreGeometry::PATH / "shaders/default3d.geom", 

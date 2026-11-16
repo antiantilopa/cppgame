@@ -12,6 +12,10 @@ private:
         const char* vertex_shader_file = nullptr, 
         const char* geometry_shader_file = nullptr,
         const char* fragment_shader_file = nullptr);
+
+    std::string _vertex_file_path;
+    std::string _geometry_file_path;
+    std::string _fragment_file_path;
 public:
     unsigned int ID;
     bool compiled_correctly;

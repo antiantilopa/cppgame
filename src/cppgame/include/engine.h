@@ -3,6 +3,7 @@
 #include "cppgame.h"
 
 #include <string>
+#include <vector>
 
 namespace CppGame {
 
@@ -13,9 +14,12 @@ public:
 
     explicit Engine(Renderer& renderer);
     void init(int width, int height, std::string title);
+    void add_updateable(Updateable& obj);
+    void remove_updateable(Updateable& obj);
     void run();
 private:
     Renderer& renderer;
+    std::vector<Updateable*> updateable;
 };
 
 }

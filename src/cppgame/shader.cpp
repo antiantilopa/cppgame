@@ -21,6 +21,7 @@ void Shader::init(const char* vertex_shader_file, const char* geometry_shader_fi
     unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 
     if (vertex_shader_file != nullptr){
+        this->_vertex_file_path = vertex_shader_file;
         std::string vertex_shader_src_str = getFileContents(vertex_shader_file);
         const char* vertex_shader_src = vertex_shader_src_str.c_str();
         glShaderSource(vertex_shader, 1, &vertex_shader_src, NULL);
@@ -31,12 +32,13 @@ void Shader::init(const char* vertex_shader_file, const char* geometry_shader_fi
             glGetShaderiv(vertex_shader, GL_INFO_LOG_LENGTH, &maxLength);
             char* errorLog = new char[maxLength];
             glGetShaderInfoLog(vertex_shader, maxLength, &maxLength, &errorLog[0]);
-            std::cout << "(!) ERROR: vertex shader compilation failed:\n" << &errorLog[0] << std::endl;
+            std::cout << "(!) ERROR: vertex shader compilation failed: " << vertex_shader_file << "\n" << &errorLog[0] << std::endl;
             delete[] errorLog;
         }
         glAttachShader(ID, vertex_shader);
     }
     if (geometry_shader_file != nullptr){
+        this->_geometry_file_path = geometry_shader_file;
         std::string geometry_shader_src_str = getFileContents(geometry_shader_file);
         const char* geometry_shader_src = geometry_shader_src_str.c_str();
         glShaderSource(geometry_shader, 1, &geometry_shader_src, NULL);
@@ -48,13 +50,14 @@ void Shader::init(const char* vertex_shader_file, const char* geometry_shader_fi
             glGetShaderiv(geometry_shader, GL_INFO_LOG_LENGTH, &maxLength);
             char* errorLog = new char[maxLength];
             glGetShaderInfoLog(geometry_shader, maxLength, &maxLength, &errorLog[0]);
-            std::cout << "(!) ERROR: geometry shader compilation failed:\n" << &errorLog[0] << std::endl;
+            std::cout << "(!) ERROR: geometry shader compilation failed: " << geometry_shader_file << "\n" << &errorLog[0] << std::endl;
             delete[] errorLog;
         }
         glAttachShader(ID, geometry_shader);
     }
 
     if (fragment_shader_file != nullptr){
+        this->_fragment_file_path = fragment_shader_file;
         std::string fragment_shader_src_str = getFileContents(fragment_shader_file);
         const char* fragment_shader_src = fragment_shader_src_str.c_str();
         glShaderSource(fragment_shader, 1, &fragment_shader_src, NULL);
@@ -66,7 +69,7 @@ void Shader::init(const char* vertex_shader_file, const char* geometry_shader_fi
             glGetShaderiv(fragment_shader, GL_INFO_LOG_LENGTH, &maxLength);
             char* errorLog = new char[maxLength];
             glGetShaderInfoLog(fragment_shader, maxLength, &maxLength, &errorLog[0]);
-            std::cout << "(!) ERROR: fragment shader compilation failed:\n" << &errorLog[0] << std::endl;
+            std::cout << "(!) ERROR: fragment shader compilation failed: " << fragment_shader_file << "\n" << &errorLog[0] << std::endl;
             delete[] errorLog;
         }
         glAttachShader(ID, fragment_shader);
@@ -117,11 +120,11 @@ Shader::Shader(
 }
 Shader::Shader(const std::string& vertex_shader_file, const std::string& fragment_shader_file) : Shader(vertex_shader_file.c_str(), fragment_shader_file.c_str()){}
 
-Shader::~Shader(){
+Shader::~Shader() {
     glDeleteProgram(ID);
 }
 
-void Shader::activate(){
+void Shader::activate() {
     glUseProgram(ID);
 }
 
@@ -131,10 +134,14 @@ void Shader::setUniform(const char* name, T* value_ptr, int dim){
     activate();
     int location = glGetUniformLocation(ID, name);
     
-    if (location == -1){
-        std::cout << "(!) WARNING: uniform '" << name << "' not found in shader program" << std::endl;
+    if (location == -1) {
+        std::cout << "(!) WARNING: uniform '" << name << "' not found in shader program\n";
+        std::cout << this->_vertex_file_path << "\n";
+        std::cout << this->_geometry_file_path << "\n";
+        std::cout << this->_fragment_file_path << std::endl;
         return;
     }
+
     if constexpr (std::is_same_v<T, float>){
         switch (dim)
         {
