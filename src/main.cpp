@@ -81,10 +81,7 @@ void ontextinput(unsigned int key){
 
 
 int main(){
-    // CoreGeometry::init();
-    // Window window = Window(WIDTH, HEIGHT, "title");
     CppGame::OpenGLRenderer renderer = CppGame::OpenGLRenderer(WIDTH, HEIGHT, "title");
-    // window.setAsMain();
 
     // pizdec: TODO HACK BUG:
     unsigned int RBO;
@@ -241,8 +238,8 @@ int main(){
         if (glGetError() == GL_INVALID_OPERATION){
             std::cout << "FVCK\n";
         }
-        // fps = (double) 1 / elapsed.count();
-        // std::cout << fps << "\n";
+        fps = (double) 1 / elapsed.count();
+        std::cout << fps << "\n";
     }
 
     // we need to terminate glfw

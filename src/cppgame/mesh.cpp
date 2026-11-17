@@ -78,10 +78,10 @@ void Mesh::draw(
 	// Take care of the camera Matrix
 	glm::vec3 cam_pos = camera->getPos();
 	
-	glUniform1f(glGetUniformLocation(shader.ID, "metallic"), 0.0);
-	glUniform3f(glGetUniformLocation(shader.ID, "albedo"), 1.0, 0.0, 0.0);
+	glUniform1f(glGetUniformLocation(shader.ID, "metallic"), 1.0);
+	glUniform3f(glGetUniformLocation(shader.ID, "albedo"), 1.0, 1.0, 1.0);
 	glUniform1f(glGetUniformLocation(shader.ID, "roughness"), 0.2);
-	glUniform1f(glGetUniformLocation(shader.ID, "ao"), 1.0);
+	glUniform1f(glGetUniformLocation(shader.ID, "ao"), 0.2);
 	glUniform3f(glGetUniformLocation(shader.ID, "cam_pos"), cam_pos.x, cam_pos.y, cam_pos.z);
 
 	glm::mat4 trans_mat = glm::translate(trans);

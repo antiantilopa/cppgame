@@ -12,7 +12,7 @@ const float pi = 3.14159265358979f;
 void main()
 {
     FragColor = out_color;
-    FragColor = texture(texture1, (sin((out_tex_coord-0.5) * pi)) / 2 + 0.5) * out_color;
+    FragColor = texture(texture1, out_tex_coord) * out_color;
     // if (length(FragColor) < 1.1f){
     //     discard;
     // }
