@@ -18,6 +18,7 @@ EBO* CoreGeometry::ebo_line2d_ptr = nullptr;
 EBO* CoreGeometry::ebo_cube_ptr = nullptr;
 EBO* CoreGeometry::ebo_line3d_ptr = nullptr;
 FBO* CoreGeometry::fbo_ptr = nullptr;
+RBO* CoreGeometry::rbo_ptr = nullptr;
 std::filesystem::path CoreGeometry::PATH = "";
 
 void CoreGeometry::init(){

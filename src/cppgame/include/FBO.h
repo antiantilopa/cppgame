@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 #include "texture.h"
+#include "RBO.h"
 
 class FBO{
 public:
@@ -11,7 +12,7 @@ public:
     void bind(); // do not use unknowingly !
     void unbind(); // do not use unknowingly !
     void bindTexture(Texture& output);
-    // void bindRBO(); // not implemeted yet
+    void bindRBO(RBO& RBO); // binds RBO to the FBO
     void setup(); //setup FBO before drawing on it
     void setup(Texture& output); //setup FBO before drawing on it
 };

@@ -6,21 +6,21 @@ Mesh* CppGame::Draw3D::piramid_mesh = nullptr;
 Mesh* CppGame::Draw3D::nothing_mesh = nullptr;
 
 std::vector<Vertex3d> vertices_cube = {
-    Vertex3d{glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
-    Vertex3d{glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
-    Vertex3d{glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
-    Vertex3d{glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(0.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
-    Vertex3d{glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
-    Vertex3d{glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3(1.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
-    Vertex3d{glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
-    Vertex3d{glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+    Vertex3d{glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+    Vertex3d{glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+    Vertex3d{glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+    Vertex3d{glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+    Vertex3d{glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
+    Vertex3d{glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+    Vertex3d{glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
+    Vertex3d{glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
 };
 std::vector<Vertex3d> vertices_piramid = {
-    Vertex3d{glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(-0.5f, 0.0f,  0.5f), glm::vec3(-0.5f, 0.0f,  0.5f)}, 
-	Vertex3d{glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(-0.5f, 0.0f, -0.5f)}, 
-	Vertex3d{glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3( 0.5f, 0.0f, -0.5f), glm::vec3( 0.5f, 0.0f, -0.5f)}, 
-	Vertex3d{glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3( 0.5f, 0.0f,  0.5f), glm::vec3( 0.5f, 0.0f,  0.5f)}, 
-	Vertex3d{glm::vec3( 0.0f,  1.0f,  0.0f), glm::vec3( 0.0f, 0.8f,  0.0f), glm::vec3( 0.0f, 0.8f,  0.0f)},
+    Vertex3d{glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-0.5f, 0.0f,  0.5f)}, 
+	Vertex3d{glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-0.5f, 0.0f, -0.5f)}, 
+	Vertex3d{glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3( 0.5f, 0.0f, -0.5f)}, 
+	Vertex3d{glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3( 0.5f, 0.0f,  0.5f)}, 
+	Vertex3d{glm::vec3( 0.0f,  1.0f,  0.0f), glm::vec3(0.0f, 0.8f, 0.0f), glm::vec3( 0.0f, 0.8f,  0.0f)},
 };
 std::vector<unsigned int> indices_cube = {
     0, 1, 2, 1, 2, 3,

@@ -19,15 +19,30 @@ out vec3 current_pos;
 out vec2 tex_coord;
 
 void main(){
-    // normal = cross(gs_in[0].current_pos - gs_in[1].current_pos, gs_in[0].current_pos - gs_in[2].current_pos);
-    for (int i = 0; i < 3; i++){
-        out_color = gs_in[i].out_color;
-        relpos = gs_in[i].relpos;
-        normal = gs_in[i].normal;
-        current_pos = gs_in[i].current_pos;
-        tex_coord = gs_in[i].tex_coord;
-        gl_Position = gl_in[i].gl_Position; 
-        EmitVertex();
+    // that 'if' is just even worse... TODO
+    if (gs_in[0].normal == vec3(0.0f)){
+        normal = cross(gs_in[0].current_pos - gs_in[1].current_pos, gs_in[0].current_pos - gs_in[2].current_pos);
+        for (int i = 0; i < 3; i++){
+            out_color = gs_in[i].out_color;
+            relpos = gs_in[i].relpos;
+            normal = normal;
+            current_pos = gs_in[i].current_pos;
+            tex_coord = gs_in[i].tex_coord;
+            gl_Position = gl_in[i].gl_Position; 
+            EmitVertex();
+        }
+        EndPrimitive();
     }
-    EndPrimitive();
+    else{
+        for (int i = 0; i < 3; i++){
+            out_color = gs_in[i].out_color;
+            relpos = gs_in[i].relpos;
+            normal = gs_in[i].normal;
+            current_pos = gs_in[i].current_pos;
+            tex_coord = gs_in[i].tex_coord;
+            gl_Position = gl_in[i].gl_Position; 
+            EmitVertex();
+        }
+        EndPrimitive();
+    }
 } 

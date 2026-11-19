@@ -83,13 +83,6 @@ void ontextinput(unsigned int key){
 int main(){
     CppGame::OpenGLRenderer renderer = CppGame::OpenGLRenderer(WIDTH, HEIGHT, "title");
 
-    // pizdec: TODO HACK BUG:
-    unsigned int RBO;
-    glGenRenderbuffers(1, &RBO);
-    glBindRenderbuffer(GL_RENDERBUFFER, RBO);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, WIDTH, HEIGHT);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
-
     Mouse::init();
     Mouse::setMinimalHoldTicks(10);
     Mouse::setMaximalTicksBetweenDoubleClick(20);

@@ -22,8 +22,13 @@ Window& OpenGLRenderer::init(int width, int height, std::string title) {
 Texture& OpenGLRenderer::init_screen(){
     Texture& screen = *new Texture(Window::window_ptr->width, Window::window_ptr->height);
     FBO* fbo_ptr = new FBO();
+    RBO* rbo_ptr = new RBO();
     fbo_ptr->bindTexture(screen);
+    rbo_ptr->setStorage(Window::window_ptr->width, Window::window_ptr->height);
+    fbo_ptr->bindRBO(*rbo_ptr);
+
     CoreGeometry::fbo_ptr = fbo_ptr;
+    CoreGeometry::rbo_ptr = rbo_ptr;
     return screen;
 }
 

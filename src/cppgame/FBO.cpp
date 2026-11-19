@@ -17,6 +17,12 @@ void FBO::bindTexture(Texture& output){
     output_texture = &output;
 }
 
+void FBO::bindRBO(RBO& RBO){
+    bind();
+    RBO.bind();
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO.ID);
+}
+
 void FBO::setup(){
     bind();
     glViewport(0, 0, output_texture->width, output_texture->height);
